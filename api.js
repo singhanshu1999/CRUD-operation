@@ -19,6 +19,9 @@ router.put('/details/:actor_id',async(req,res)=>{
         const {actor_id} = req.params;
         const {first_name} = req.body;
         const updatedactor = await service.updateUser(actor_id, first_name);
+        if(!updatedactor){
+           console.log("actor id is invalid");
+        }
         res.json(updatedactor);
       } 
       catch (error) {
@@ -45,6 +48,9 @@ router.delete('/remove/:actor_id', async(req,res)=>{
     try{
         const{actor_id} = req.params;
         const deleteactor = await service.removeUser(actor_id);
+        if(!deleteactor){
+            console.log("actor_id is invalid");
+        }
         res.json(deleteactor);
     }
     catch(error){
