@@ -1,4 +1,4 @@
-const db = require('./db');
+const db = require('../connector/db');
 
 
 async function createUser(first_name, last_name){
