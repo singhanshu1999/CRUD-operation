@@ -1,5 +1,5 @@
 const express = require('express');
-const api = require('../route_layer/router');
+const api = require('../controller/actor_api');
 
 const app = express();
 const port = 8000;

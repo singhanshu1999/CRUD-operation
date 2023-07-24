@@ -1,9 +1,11 @@
+const express = require('express');
 
-const service = require('../service_layer/service.js');
+const service = require('../service/actorService.js');
+
+const router = express.Router();
 
 
-
-exports.find = async(req,res)=>{
+router.get('/details', async(req,res)=>{
     try{
         const fetchusers = await service.getUser();
         res.json(fetchusers);
@@ -12,9 +14,9 @@ exports.find = async(req,res)=>{
         console.error('error while retrieving the data',error);
         res.status(500).json({error:'error'});
     }
-};
+});
 
-exports.update = async(req,res)=>{
+router.put('/details/:actor_id', async(req,res)=>{
     try{
         const {actor_id} = req.params;
         const {first_name} = req.body;
@@ -28,9 +30,9 @@ exports.update = async(req,res)=>{
         console.error('Error while updating record:', error);
         res.status(500).json({ error: 'error' });
       }
-};
+});
 
-exports.create = async(req,res)=>{
+router.post('/create', async(req,res)=>{
     try{
         const {first_name,last_name} = req.body;
         const newactor = await service.createUser(first_name, last_name);
@@ -42,9 +44,9 @@ exports.create = async(req,res)=>{
 
     }
     
-};
+});
 
-exports.removeactor = async(req,res)=>{
+router.delete('/remove/:actor_id', async(req,res)=>{
     try{
         const{actor_id} = req.params;
         const deleteactor = await service.removeUser(actor_id);
@@ -57,4 +59,7 @@ exports.removeactor = async(req,res)=>{
         console.error('erroe while deleting the record',error);
         req.status(500).json({error:'error'});
     }
-};
+});
+
+
+module.exports = router;
