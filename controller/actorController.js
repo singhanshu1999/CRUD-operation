@@ -5,6 +5,20 @@ const service = require('../service/actorService.js');
 const router = express.Router();
 
 
+router.post('/create', async(req,res)=>{
+    try{
+        const {first_name,last_name} = req.body;
+        const createActor = await service.createUser(first_name, last_name);
+        res.json(createActor);
+    }
+    catch(error){
+        console.error('Error ehile creating record:', error);
+        res.status(500).json({error: 'error' });
+
+    }
+    
+});
+
 router.get('/details', async(req,res)=>{
     try{
         const fetchUsers = await service.getUser();
@@ -30,20 +44,6 @@ router.put('/details/:actor_id', async(req,res)=>{
         console.error('Error while updating record:', error);
         res.status(500).json({ error: 'error' });
       }
-});
-
-router.post('/create', async(req,res)=>{
-    try{
-        const {first_name,last_name} = req.body;
-        const createActor = await service.createUser(first_name, last_name);
-        res.json(createActor);
-    }
-    catch(error){
-        console.error('Error ehile creating record:', error);
-        res.status(500).json({error: 'error' });
-
-    }
-    
 });
 
 router.delete('/remove/:actor_id', async(req,res)=>{
