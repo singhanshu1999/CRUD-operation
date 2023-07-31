@@ -6,8 +6,8 @@ const app = express();
 const port = 8000;
 
 app.use(express.json());
-app.use('/api',actorApi);
-app.use('/api',addressApi);
+app.use('/actor',actorApi);
+app.use('/address',addressApi);
 
 app.listen(port,()=>{
     console.log('server is running ', port)

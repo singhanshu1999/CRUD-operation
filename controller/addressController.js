@@ -5,7 +5,7 @@ const service = require('../service/addressService.js');
 const router = express.Router();
 
 
-router.post('/newaddress', async(req,res)=>{
+router.post('/create', async(req,res)=>{
     try{
         const {address, address2, district, city_id, postal_code, phone} = req.body;
         const newAddress = await service.createAddress(address, address2, district,city_id, postal_code, phone);
@@ -17,7 +17,7 @@ router.post('/newaddress', async(req,res)=>{
     }
 });
 
-router.get('/address', async(req,res)=>{
+router.get('/', async(req,res)=>{
     try{
         const fetchAddress = await service.getAddress();
         res.json(fetchAddress);   
@@ -44,7 +44,7 @@ router.put('/update/:address_id', async(req,res)=>{
     }
 });
 
-router.delete('/erase/:address_id', async(req,res)=>{
+router.delete('/remove/:address_id', async(req,res)=>{
     try{
         const {address_id} = req.params;
         const deleteAddress = await service.removeAddress(address_id);
