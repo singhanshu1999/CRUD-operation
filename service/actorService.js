@@ -15,6 +15,11 @@ async function getUser() {
 }
 
 async function getUserById(actor_id) {
+  const checkQuery = " SELECT actor_id FROM actor WHERE actor_id=$1 ";
+  const checkResult = await db.query(checkQuery, [actor_id]);
+  if (checkResult.rows.length === 0) {
+    throw new Error("actor id is not available");
+  }
   const getByIdQuery = "SELECT * FROM actor WHERE actor_id =$1";
   const values = [actor_id];
   const result = await db.query(getByIdQuery, values);
@@ -22,6 +27,11 @@ async function getUserById(actor_id) {
 }
 
 async function updateUser(actor_id, first_name) {
+  const checkQuery = " SELECT actor_id FROM actor WHERE actor_id=$1 ";
+  const checkResult = await db.query(checkQuery, [actor_id]);
+  if (checkResult.rows.length === 0) {
+    throw new Error("actor id is not available");
+  }
   const updateQuery =
     " UPDATE actor SET first_name = $1 WHERE actor_id = $2 RETURNING *";
   const values = [first_name, actor_id];
@@ -30,6 +40,11 @@ async function updateUser(actor_id, first_name) {
 }
 
 async function removeUser(actor_id) {
+  const checkQuery = " SELECT actor_id FROM actor WHERE actor_id=$1 ";
+  const checkResult = await db.query(checkQuery, [actor_id]);
+  if (checkResult.rows.length === 0) {
+    throw new Error("actor id is not available");
+  }
   const removeQuery = " DELETE FROM actor WHERE actor_id = $1 RETURNING * ";
   const values = [actor_id];
   const result = await db.query(removeQuery, values);

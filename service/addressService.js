@@ -22,6 +22,11 @@ async function getAddress() {
 }
 
 async function getAddressById(address_id) {
+  const checkQuery = " SELECT address_id FROM address WHERE address_id=$1 ";
+  const checkResult = await db.query(checkQuery, [address_id]);
+  if (checkResult.rows.length === 0) {
+    throw new Error("address id is not available");
+  }
   const getByIdQuery = "SELECT * FROM address WHERE address_id=$1";
   const values = [address_id];
   const result = await db.query(getByIdQuery, values);
@@ -29,6 +34,11 @@ async function getAddressById(address_id) {
 }
 
 async function updateAddress(address_id, address, address2, district) {
+  const checkQuery = " SELECT address_id FROM address WHERE address_id=$1 ";
+  const checkResult = await db.query(checkQuery, [address_id]);
+  if (checkResult.rows.length === 0) {
+    throw new Error("address id is not available");
+  }
   const updateQuery =
     "UPDATE address SET address =$1, address2 =$2, district =$3 WHERE address_id =$4 RETURNING *";
   const values = [address, address2, district, address_id];
@@ -37,6 +47,11 @@ async function updateAddress(address_id, address, address2, district) {
 }
 
 async function removeAddress(address_id) {
+  const checkQuery = " SELECT address_id FROM address WHERE address_id=$1 ";
+  const checkResult = await db.query(checkQuery, [address_id]);
+  if (checkResult.rows.length === 0) {
+    throw new Error("address id is not available");
+  }
   const removeQuery = "DELETE FROM address WHERE address_id =$1 RETURNING *";
   const values = [address_id];
   const result = await db.query(removeQuery, values);
