@@ -1,6 +1,6 @@
 const express = require("express");
 
-const service = require("../service/addressService.js");
+const service = require("../service/addressService");
 
 const router = express.Router();
 

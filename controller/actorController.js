@@ -1,6 +1,6 @@
 const express = require("express");
 
-const service = require("../service/actorService.js");
+const service = require("../service/actorService");
 
 const router = express.Router();
 

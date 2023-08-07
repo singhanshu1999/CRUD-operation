@@ -18,7 +18,7 @@ async function getUserById(actor_id) {
   const checkQuery = " SELECT actor_id FROM actor WHERE actor_id=$1 ";
   const checkResult = await db.query(checkQuery, [actor_id]);
   if (checkResult.rows.length === 0) {
-    throw new Error("actor id is not available");
+    throw new Error("actor id is not valid!!");
   }
   const getByIdQuery = "SELECT * FROM actor WHERE actor_id =$1";
   const values = [actor_id];
@@ -30,7 +30,7 @@ async function updateUser(actor_id, first_name) {
   const checkQuery = " SELECT actor_id FROM actor WHERE actor_id=$1 ";
   const checkResult = await db.query(checkQuery, [actor_id]);
   if (checkResult.rows.length === 0) {
-    throw new Error("actor id is not available");
+    throw new Error("actor id is not valid!!");
   }
   const updateQuery =
     " UPDATE actor SET first_name = $1 WHERE actor_id = $2 RETURNING *";
@@ -43,7 +43,7 @@ async function removeUser(actor_id) {
   const checkQuery = " SELECT actor_id FROM actor WHERE actor_id=$1 ";
   const checkResult = await db.query(checkQuery, [actor_id]);
   if (checkResult.rows.length === 0) {
-    throw new Error("actor id is not available");
+    throw new Error("actor id is not valid!!");
   }
   const removeQuery = " DELETE FROM actor WHERE actor_id = $1 RETURNING * ";
   const values = [actor_id];
