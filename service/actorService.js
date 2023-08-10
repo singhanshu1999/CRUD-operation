@@ -1,4 +1,4 @@
-const db = require("../connector/acotrDb");
+const db = require("../connector/actorDb");
 
 async function createActor(first_name, last_name) {
   const insertQuery = db.queries.insertActor;
