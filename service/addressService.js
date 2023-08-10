@@ -1,4 +1,4 @@
-const db = require("../connector/db");
+const db = require("../connector/addressDb");
 
 async function createAddress(
   address,
@@ -8,53 +8,56 @@ async function createAddress(
   postal_code,
   phone
 ) {
-  const insertQuery =
-    "INSERT INTO address(address, address2, district, city_id, postal_code, phone) VALUES($1, $2, $3, $4, $5, $6) RETURNING *";
+  const insertQuery = db.queries.insertAddress;
   const values = [address, address2, district, city_id, postal_code, phone];
-  const result = await db.query(insertQuery, values);
+  const client = await db.pool1.connect();
+  const result = await client.query(insertQuery, values);
   return result.rows[0];
 }
 
 async function getAddress() {
-  const getQuery = "SELECT * FROM address";
-  const result = await db.query(getQuery);
+  const getQuery = db.queries.gettingAddress;
+  const client = await db.pool1.connect();
+  const result = await client.query(getQuery);
   return result.rows;
 }
 
 async function getAddressById(address_id) {
-  const checkQuery = " SELECT address_id FROM address WHERE address_id=$1 ";
-  const checkResult = await db.query(checkQuery, [address_id]);
+  const checkQuery = db.queries.findIdQuery;
+  const client = await db.pool1.connect();
+  const checkResult = await client.query(checkQuery, [address_id]);
   if (checkResult.rows.length === 0) {
     throw new Error("address id is not valid!!");
   }
-  const getByIdQuery = "SELECT * FROM address WHERE address_id=$1";
+  const getByIdQuery = db.queries.getAddressById;
   const values = [address_id];
-  const result = await db.query(getByIdQuery, values);
+  const result = await client.query(getByIdQuery, values);
   return result.rows[0];
 }
 
 async function updateAddress(address_id, address, address2, district) {
-  const checkQuery = " SELECT address_id FROM address WHERE address_id=$1 ";
-  const checkResult = await db.query(checkQuery, [address_id]);
+  const checkQuery = db.queries.findIdQuery;
+  const client = await db.pool1.connect();
+  const checkResult = await client.query(checkQuery, [address_id]);
   if (checkResult.rows.length === 0) {
     throw new Error("address id is not valid!!");
   }
-  const updateQuery =
-    "UPDATE address SET address =$1, address2 =$2, district =$3 WHERE address_id =$4 RETURNING *";
+  const updateQuery = db.queries.updateAddressById;
   const values = [address, address2, district, address_id];
-  const result = await db.query(updateQuery, values);
+  const result = await client.query(updateQuery, values);
   return result.rows[0];
 }
 
 async function removeAddress(address_id) {
-  const checkQuery = " SELECT address_id FROM address WHERE address_id=$1 ";
-  const checkResult = await db.query(checkQuery, [address_id]);
+  const checkQuery = db.queries.findIdQuery;
+  const client = await db.pool1.connect();
+  const checkResult = await client.query(checkQuery, [address_id]);
   if (checkResult.rows.length === 0) {
     throw new Error("address id is not valid!!");
   }
-  const removeQuery = "DELETE FROM address WHERE address_id =$1 RETURNING *";
+  const removeQuery = db.queries.removeAddressById;
   const values = [address_id];
-  const result = await db.query(removeQuery, values);
+  const result = await client.query(removeQuery, values);
   return result.rows[0];
 }
 

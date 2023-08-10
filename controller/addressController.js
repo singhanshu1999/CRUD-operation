@@ -54,9 +54,6 @@ router.put("/update/:address_id", async (req, res) => {
       address2,
       district
     );
-    if (!modifyAddress) {
-      console.log("address id is invalid");
-    }
     res.json(modifyAddress);
   } catch (error) {
     console.error("error while fetching the address", error);
@@ -68,9 +65,6 @@ router.delete("/remove/:address_id", async (req, res) => {
   try {
     const { address_id } = req.params;
     const deleteAddress = await service.removeAddress(address_id);
-    if (!deleteAddress) {
-      console.log("address id id invalid");
-    }
     res.json(deleteAddress);
   } catch (error) {
     console.error("error while fetching the address", error);

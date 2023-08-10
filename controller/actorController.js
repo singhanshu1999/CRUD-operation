@@ -7,8 +7,8 @@ const router = express.Router();
 router.post("/create", async (req, res) => {
   try {
     const { first_name, last_name } = req.body;
-    const createActor = await service.createUser(first_name, last_name);
-    res.json(createActor);
+    const newActor = await service.createActor(first_name, last_name);
+    res.json(newActor);
   } catch (error) {
     console.error("Error ehile creating record:", error);
     res.status(500).json({ error: "error" });
@@ -17,8 +17,8 @@ router.post("/create", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const fetchUsers = await service.getUser();
-    res.json(fetchUsers);
+    const fetchActor = await service.getActor();
+    res.json(fetchActor);
   } catch (error) {
     console.error("error while retrieving the data", error);
     res.status(500).json({ error: "error" });
@@ -28,8 +28,8 @@ router.get("/", async (req, res) => {
 router.get("/:actor_id", async (req, res) => {
   try {
     const { actor_id } = req.params;
-    const fetchUsersById = await service.getUserById(actor_id);
-    res.json(fetchUsersById);
+    const fetchActorById = await service.getActorById(actor_id);
+    res.json(fetchActorById);
   } catch (error) {
     console.error("error while retrieving the data", error);
     res.status(500).json({ error: "error" });
@@ -40,11 +40,8 @@ router.put("/update/:actor_id", async (req, res) => {
   try {
     const { actor_id } = req.params;
     const { first_name } = req.body;
-    const updateActor = await service.updateUser(actor_id, first_name);
-    if (!updateActor) {
-      console.log("actor id is invalid");
-    }
-    res.json(updateActor);
+    const modifyActor = await service.updateActor(actor_id, first_name);
+    res.json(modifyActor);
   } catch (error) {
     console.error("Error while updating record:", error);
     res.status(500).json({ error: "error" });
@@ -54,11 +51,8 @@ router.put("/update/:actor_id", async (req, res) => {
 router.delete("/remove/:actor_id", async (req, res) => {
   try {
     const { actor_id } = req.params;
-    const removeActor = await service.removeUser(actor_id);
-    if (!removeActor) {
-      console.log("actor_id is invalid");
-    }
-    res.json(removeActor);
+    const deleteActor = await service.removeActor(actor_id);
+    res.json(deleteActor);
   } catch (error) {
     console.error("erroe while deleting the record", error);
     req.status(500).json({ error: "error" });

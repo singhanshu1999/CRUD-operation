@@ -1,60 +1,63 @@
-const db = require("../connector/db");
+const db = require("../connector/acotrDb");
 
-async function createUser(first_name, last_name) {
-  const insertQuery =
-    " INSERT INTO actor (first_name, last_name) VALUES ($1,$2) RETURNING * ";
+async function createActor(first_name, last_name) {
+  const insertQuery = db.queries.insertActor;
   const values = [first_name, last_name];
-  const result = await db.query(insertQuery, values);
+  const client = await db.pool1.connect();
+  const result = await client.query(insertQuery, values);
   return result.rows[0];
 }
 
-async function getUser() {
-  const getQuery = "SELECT * FROM actor";
-  const result = await db.query(getQuery);
+async function getActor() {
+  const getQuery = db.queries.gettingActor;
+  const client = await db.pool1.connect();
+  const result = await client.query(getQuery);
   return result.rows;
 }
 
-async function getUserById(actor_id) {
-  const checkQuery = " SELECT actor_id FROM actor WHERE actor_id=$1 ";
-  const checkResult = await db.query(checkQuery, [actor_id]);
+async function getActorById(actor_id) {
+  const checkQuery = db.queries.findIdQuery;
+  const client = await db.pool1.connect();
+  const checkResult = await client.query(checkQuery, [actor_id]);
   if (checkResult.rows.length === 0) {
     throw new Error("actor id is not valid!!");
   }
-  const getByIdQuery = "SELECT * FROM actor WHERE actor_id =$1";
+  const getByIdQuery = db.queries.getActorById;
   const values = [actor_id];
-  const result = await db.query(getByIdQuery, values);
+  const result = await client.query(getByIdQuery, values);
   return result.rows[0];
 }
 
-async function updateUser(actor_id, first_name) {
-  const checkQuery = " SELECT actor_id FROM actor WHERE actor_id=$1 ";
-  const checkResult = await db.query(checkQuery, [actor_id]);
+async function updateActor(actor_id, first_name) {
+  const checkQuery = db.queries.findIdQuery;
+  const client = await db.pool1.connect();
+  const checkResult = await client.query(checkQuery, [actor_id]);
   if (checkResult.rows.length === 0) {
     throw new Error("actor id is not valid!!");
   }
-  const updateQuery =
-    " UPDATE actor SET first_name = $1 WHERE actor_id = $2 RETURNING *";
+  const updateQuery = db.queries.updateActorById;
   const values = [first_name, actor_id];
-  const result = await db.query(updateQuery, values);
+  const result = await client.query(updateQuery, values);
   return result.rows[0];
 }
 
-async function removeUser(actor_id) {
-  const checkQuery = " SELECT actor_id FROM actor WHERE actor_id=$1 ";
-  const checkResult = await db.query(checkQuery, [actor_id]);
+async function removeActor(actor_id) {
+  const checkQuery = db.queries.findIdQuery;
+  const client = await db.pool1.connect();
+  const checkResult = await client.query(checkQuery, [actor_id]);
   if (checkResult.rows.length === 0) {
     throw new Error("actor id is not valid!!");
   }
-  const removeQuery = " DELETE FROM actor WHERE actor_id = $1 RETURNING * ";
+  const removeQuery = db.queries.removeActorById;
   const values = [actor_id];
-  const result = await db.query(removeQuery, values);
+  const result = await client.query(removeQuery, values);
   return result.rows[0];
 }
 
 module.exports = {
-  createUser,
-  getUser,
-  getUserById,
-  updateUser,
-  removeUser,
+  createActor,
+  getActor,
+  getActorById,
+  updateActor,
+  removeActor,
 };
