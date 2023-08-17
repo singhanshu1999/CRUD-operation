@@ -2,10 +2,16 @@ const express = require("express");
 
 const service = require("../service/filmService");
 
+const validation = require("../validation/filmValidation");
+
 const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
+    const { error } = validation.createFilmSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
     const {
       title,
       description,
@@ -60,6 +66,10 @@ router.get("/:film_id", async (req, res) => {
 
 router.put("/update/:film_id", async (req, res) => {
   try {
+    const { error } = validation.createFilmSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
     const { film_id } = req.params;
     const { description, rental_duration, rental_rate } = req.body;
     const modifyFilm = await service.updateFilm(

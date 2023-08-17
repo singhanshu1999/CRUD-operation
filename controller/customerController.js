@@ -2,10 +2,16 @@ const express = require("express");
 
 const service = require("../service/customerService");
 
+const validation = require("../validation/customerValidation");
+
 const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
+    const { error } = validation.createCustomerSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
     const {
       first_name,
       store_id,
@@ -56,6 +62,10 @@ router.get("/:customer_id", async (req, res) => {
 
 router.put("/update/:customer_id", async (req, res) => {
   try {
+    const { error } = validation.createCustomerSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
     const { customer_id } = req.params;
     const { store_id, first_name, last_name } = req.body;
     /*  if (!Number.isInteger(store_id)) {

@@ -2,10 +2,16 @@ const express = require("express");
 
 const service = require("../service/addressService");
 
+const validation = require("../validation/addressValidation");
+
 const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
+    const { error } = validation.createAddressSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
     const { address, address2, district, city_id, postal_code, phone } =
       req.body;
     const newAddress = await service.createAddress(
@@ -46,6 +52,10 @@ router.get("/:address_id", async (req, res) => {
 
 router.put("/update/:address_id", async (req, res) => {
   try {
+    const { error } = validation.updateAddressSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
     const { address_id } = req.params;
     const { address, address2, district } = req.body;
     const modifyAddress = await service.updateAddress(
