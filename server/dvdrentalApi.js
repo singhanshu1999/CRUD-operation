@@ -5,6 +5,7 @@ const filmApi = require("../controller/filmController");
 const customerApi = require("../controller/customerController");
 const rentalApi = require("../controller/rentalController");
 const staffApi = require("../controller/staffController");
+const storeApi = require("../controller/storeController");
 
 const app = express();
 const port = 8000;
@@ -16,6 +17,7 @@ app.use("/film", filmApi);
 app.use("/customer", customerApi);
 app.use("/rental", rentalApi);
 app.use("/staff", staffApi);
+app.use("/store", storeApi);
 
 app.listen(port, () => {
   console.log("server is running ", port);
