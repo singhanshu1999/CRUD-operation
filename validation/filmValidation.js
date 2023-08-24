@@ -8,9 +8,9 @@ const createFilmSchema = Joi.object({
   rental_duration: Joi.number().required(),
   rental_rate: Joi.number().required(),
   length: Joi.number().integer().required(),
-  replacement_cost: Joi.number().integer().required(),
+  replacement_cost: Joi.number().required(),
   rating: Joi.string().required(),
-  special_features: Joi.array().required(),
+  special_features: Joi.string(),
 });
 
 const updateFilmSchema = Joi.object({

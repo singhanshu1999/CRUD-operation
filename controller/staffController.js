@@ -62,10 +62,10 @@ router.get("/:staff_id", async (req, res) => {
 
 router.put("/update/:staff_id", async (req, res) => {
   try {
-    const { error } = validation.updateStaffSchema.validate(req.body);
+    /* const { error } = validation.updateStaffSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
-    }
+    }*/
     const { staff_id } = req.params;
     const { first_name, username, password } = req.body;
     const modifyStaff = await service.updatestaff(

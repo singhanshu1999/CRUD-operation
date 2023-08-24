@@ -8,10 +8,10 @@ const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    const { error } = validation.createRentalSchema.validate(req.body);
+    /* const { error } = validation.createRentalSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
-    }
+    }*/
     const { rental_date, inventory_id, customer_id, return_date, staff_id } =
       req.body;
     const newRental = await service.createRental(

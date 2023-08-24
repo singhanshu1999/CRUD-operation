@@ -14,7 +14,7 @@ const createCustomerSchema = Joi.object({
     .required(),
   address_id: Joi.number().required(),
   activebool: Joi.string().required(),
-  create_date: Joi.number().integer().required(),
+  create_date: Joi.string().required(),
   active: Joi.number().integer().required(),
 });
 

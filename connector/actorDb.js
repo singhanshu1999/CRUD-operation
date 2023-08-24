@@ -1,5 +1,7 @@
 const { Pool } = require("pg");
 
+const validation = require("../validation/actorValidation");
+
 const pool1 = new Pool({
   user: "postgres",
   host: "localhost",
@@ -19,4 +21,82 @@ const queries = {
   removeActorById: " DELETE FROM actor WHERE actor_id = $1 RETURNING * ",
 };
 
-module.exports = { pool1, queries };
+async function actorCreateQuery(actorData) {
+  const { first_name, last_name } = actorData;
+  const { error } = validation.createActorSchema.validate({
+    first_name: first_name,
+    last_name: last_name,
+  });
+  if (error) {
+    console.error("Validation error:", error.details[0].message);
+    return;
+  }
+  const insertQuery = queries.insertActor;
+  const values = [first_name, last_name];
+  const client = await pool1.connect();
+  const result = await client.query(insertQuery, values);
+  return result.rows[0];
+}
+
+async function actorGetQuery() {
+  const getQuery = queries.gettingActor;
+  const client = await pool1.connect();
+  const result = await client.query(getQuery);
+  return result.rows;
+}
+
+async function actorGetByIdQuery(actor_id) {
+  const checkQuery = queries.findIdQuery;
+  const client = await pool1.connect();
+  const checkResult = await client.query(checkQuery, [actor_id]);
+  if (checkResult.rows.length === 0) {
+    throw new Error("actor id is not valid!!");
+  }
+  const getByIdQuery = queries.getActorById;
+  const values = [actor_id];
+  const result = await client.query(getByIdQuery, values);
+  return result.rows[0];
+}
+
+async function actorUpdateQuery(actor_id, first_name) {
+  const { error } = validation.updateActorSchema.validate({
+    first_name: first_name,
+  });
+  if (error) {
+    console.error("Validation error:", error.details[0].message);
+    return;
+  }
+  const checkQuery = queries.findIdQuery;
+  const client = await pool1.connect();
+  const checkResult = await client.query(checkQuery, [actor_id]);
+  if (checkResult.rows.length === 0) {
+    throw new Error("actor id is not valid!!");
+  }
+  const updateQuery = queries.updateActorById;
+  const values = [first_name, actor_id];
+  const result = await client.query(updateQuery, values);
+  return result.rows[0];
+}
+
+async function actorRemoveQuery(actor_id) {
+  const checkQuery = queries.findIdQuery;
+  const client = await pool1.connect();
+  const checkResult = await client.query(checkQuery, [actor_id]);
+  if (checkResult.rows.length === 0) {
+    throw new Error("actor id is not valid!!");
+  }
+  const removeQuery = queries.removeActorById;
+  const values = [actor_id];
+  const result = await client.query(removeQuery, values);
+  return result.rows[0];
+}
+
+module.exports = {
+  pool1,
+  queries,
+  actorCreateQuery,
+  actorGetQuery,
+  actorGetByIdQuery,
+  actorUpdateQuery,
+  actorRemoveQuery,
+};

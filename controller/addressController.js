@@ -8,10 +8,10 @@ const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    const { error } = validation.createAddressSchema.validate(req.body);
+    /* const { error } = validation.createAddressSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ error: error.details[0].message });
-    }
+    }*/
     const { address, address2, district, city_id, postal_code, phone } =
       req.body;
     const newAddress = await service.createAddress(
