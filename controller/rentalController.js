@@ -2,25 +2,14 @@ const express = require("express");
 
 const service = require("../service/rentalService");
 
-const validation = require("../validation/rentalValidation");
+const RentalInfoDao = require("../pojo/RentalInfo");
 
 const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    /* const { error } = validation.createRentalSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
-    }*/
-    const { rental_date, inventory_id, customer_id, return_date, staff_id } =
-      req.body;
-    const newRental = await service.createRental(
-      rental_date,
-      inventory_id,
-      customer_id,
-      return_date,
-      staff_id
-    );
+    const RentalInfoDaoInstance = new RentalInfoDao(req.body);
+    const newRental = await service.createRental(RentalInfoDaoInstance);
     return res.json(newRental);
   } catch (error) {
     console.error("error while fetching the address", error);
@@ -51,10 +40,6 @@ router.get("/:rental_id", async (req, res) => {
 
 router.put("/update/:rental_id", async (req, res) => {
   try {
-    const { error } = validation.updateRentalSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
-    }
     const { rental_id } = req.params;
     const { rental_date, customer_id, return_date } = req.body;
     const modifyRental = await service.updateRental(

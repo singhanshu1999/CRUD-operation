@@ -1,6 +1,7 @@
 const { Pool } = require("pg");
 
 const validation = require("../validation/filmValidation");
+const FilmInfoDao = require("../pojo/FilmInfo");
 
 const pool1 = new Pool({
   user: "postgres",
@@ -21,46 +22,26 @@ const queries = {
   removeFilmById: " DELETE FROM film WHERE film_id =$1 RETURNING * ",
 };
 
-async function filmCreateQuery(
-  title,
-  description,
-  release_year,
-  language_id,
-  rental_duration,
-  rental_rate,
-  length,
-  replacement_cost,
-  rating,
-  special_features
-) {
-  const { error } = validation.createFilmSchema.validate({
-    title,
-    description,
-    release_year,
-    language_id,
-    rental_duration,
-    rental_rate,
-    length,
-    replacement_cost,
-    rating,
-    special_features,
-  });
+async function filmCreateQuery(FilmInfoDaoInstance) {
+  console.log("FilmInfoDaoInstance:", FilmInfoDaoInstance);
+  const { error } = validation.createFilmSchema.validate(FilmInfoDaoInstance);
   if (error) {
+    console.log(error);
     console.error("Validation error:", error.details[0].message);
     return;
   }
   const insertQuery = queries.insertFilm;
   const values = [
-    title,
-    description,
-    release_year,
-    language_id,
-    rental_duration,
-    rental_rate,
-    length,
-    replacement_cost,
-    rating,
-    special_features,
+    FilmInfoDaoInstance.title,
+    FilmInfoDaoInstance.description,
+    FilmInfoDaoInstance.release_year,
+    FilmInfoDaoInstance.language_id,
+    FilmInfoDaoInstance.rental_duration,
+    FilmInfoDaoInstance.rental_rate,
+    FilmInfoDaoInstance.length,
+    FilmInfoDaoInstance.replacement_cost,
+    FilmInfoDaoInstance.rating,
+    FilmInfoDaoInstance.special_features,
   ];
   const client = await pool1.connect();
   const result = await client.query(insertQuery, values);

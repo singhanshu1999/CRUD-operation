@@ -21,31 +21,21 @@ const queries = {
   removeRentalById: " DELETE FROM rental WHERE rental_id =$1 RETURNING * ",
 };
 
-async function rentalCreateQuery(
-  rental_date,
-  inventory_id,
-  customer_id,
-  return_date,
-  staff_id
-) {
-  const { error } = validation.createRentalSchema.validate({
-    rental_date,
-    inventory_id,
-    customer_id,
-    return_date,
-    staff_id,
-  });
+async function rentalCreateQuery(RentalInfoDaoInstance) {
+  const { error } = validation.createRentalSchema.validate(
+    RentalInfoDaoInstance
+  );
   if (error) {
     console.error("Validation error:", error.details[0].message);
     return;
   }
   const createQuery = queries.insertRental;
   const values = [
-    rental_date,
-    inventory_id,
-    customer_id,
-    return_date,
-    staff_id,
+    RentalInfoDaoInstance.rental_date,
+    RentalInfoDaoInstance.inventory_id,
+    RentalInfoDaoInstance.customer_id,
+    RentalInfoDaoInstance.return_date,
+    RentalInfoDaoInstance.staff_id,
   ];
   const client = await pool1.connect();
   const result = await client.query(createQuery, values);

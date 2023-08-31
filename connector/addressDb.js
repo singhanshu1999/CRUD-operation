@@ -21,28 +21,23 @@ const queries = {
   removeAddressById: " DELETE FROM address WHERE address_id = $1 RETURNING * ",
 };
 
-async function addressCreateQuery(
-  address,
-  address2,
-  district,
-  city_id,
-  postal_code,
-  phone
-) {
-  const { error } = validation.createAddressSchema.validate({
-    address,
-    address2,
-    district,
-    city_id,
-    postal_code,
-    phone,
-  });
+async function addressCreateQuery(AddressInfoDaoInstance) {
+  const { error } = validation.createAddressSchema.validate(
+    AddressInfoDaoInstance
+  );
   if (error) {
     console.error("Validation error:", error.details[0].message);
     return;
   }
   const insertQuery = queries.insertAddress;
-  const values = [address, address2, district, city_id, postal_code, phone];
+  const values = [
+    AddressInfoDaoInstance.address,
+    AddressInfoDaoInstance.address2,
+    AddressInfoDaoInstance.district,
+    AddressInfoDaoInstance.city_id,
+    AddressInfoDaoInstance.postal_code,
+    AddressInfoDaoInstance.phone,
+  ];
   const client = await pool1.connect();
   const result = await client.query(insertQuery, values);
   return result.rows[0];

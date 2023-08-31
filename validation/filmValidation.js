@@ -10,7 +10,7 @@ const createFilmSchema = Joi.object({
   length: Joi.number().integer().required(),
   replacement_cost: Joi.number().required(),
   rating: Joi.string().required(),
-  special_features: Joi.string(),
+  special_features: Joi.array().items(Joi.string()).required(),
 });
 
 const updateFilmSchema = Joi.object({

@@ -2,40 +2,15 @@ const express = require("express");
 
 const service = require("../service/filmService");
 
-const validation = require("../validation/filmValidation");
+const FilmInfoDao = require("../pojo/FilmInfo");
 
 const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    /* const { error } = validation.createFilmSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
-    }*/
-    const {
-      title,
-      description,
-      release_year,
-      language_id,
-      rental_duration,
-      rental_rate,
-      length,
-      replacement_cost,
-      rating,
-      special_features,
-    } = req.body;
-    const newFilm = await service.createFilm(
-      title,
-      description,
-      release_year,
-      language_id,
-      rental_duration,
-      rental_rate,
-      length,
-      replacement_cost,
-      rating,
-      special_features
-    );
+    console.log("req.body:", req.body);
+    const FilmInfoDaoInstance = new FilmInfoDao(req.body);
+    const newFilm = await service.createFilm(FilmInfoDaoInstance);
     return res.json(newFilm);
   } catch (error) {
     console.error("error while fetching the film", error);
@@ -66,10 +41,6 @@ router.get("/:film_id", async (req, res) => {
 
 router.put("/update/:film_id", async (req, res) => {
   try {
-    /*const { error } = validation.createFilmSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
-    }*/
     const { film_id } = req.params;
     const { description, rental_duration, rental_rate } = req.body;
     const modifyFilm = await service.updateFilm(

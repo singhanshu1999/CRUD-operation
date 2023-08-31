@@ -2,36 +2,14 @@ const express = require("express");
 
 const service = require("../service/staffService");
 
-const validation = require("../validation/staffValidation");
+const StaffInfoDao = require("../pojo/StaffInfo");
 
 const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    const { error } = validation.createStaffSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
-    }
-    const {
-      first_name,
-      last_name,
-      address_id,
-      email,
-      store_id,
-      active,
-      username,
-      password,
-    } = req.body;
-    const newStaff = await service.createStaff(
-      first_name,
-      last_name,
-      address_id,
-      email,
-      store_id,
-      active,
-      username,
-      password
-    );
+    const StaffInfoDaoInstance = new StaffInfoDao(req.body);
+    const newStaff = await service.createStaff(StaffInfoDaoInstance);
     res.json(newStaff);
   } catch (error) {
     console.error("error while creating the staff", error);
@@ -62,10 +40,6 @@ router.get("/:staff_id", async (req, res) => {
 
 router.put("/update/:staff_id", async (req, res) => {
   try {
-    /* const { error } = validation.updateStaffSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
-    }*/
     const { staff_id } = req.params;
     const { first_name, username, password } = req.body;
     const modifyStaff = await service.updatestaff(

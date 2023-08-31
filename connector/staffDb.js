@@ -21,40 +21,22 @@ const queries = {
   removeStaffById: " DELETE FROM staff WHERE staff_id = $1 RETURNING * ",
 };
 
-async function staffCreateQuery(
-  first_name,
-  last_name,
-  address_id,
-  email,
-  store_id,
-  active,
-  username,
-  password
-) {
-  const { error } = validation.createStaffSchema.validate({
-    first_name,
-    last_name,
-    address_id,
-    email,
-    store_id,
-    active,
-    username,
-    password,
-  });
+async function staffCreateQuery(StaffInfoDaoInstance) {
+  const { error } = validation.createStaffSchema.validate(StaffInfoDaoInstance);
   if (error) {
     console.error("Validation error:", error.details[0].message);
     return;
   }
   const createQuery = queries.insertStaff;
   const values = [
-    first_name,
-    last_name,
-    address_id,
-    email,
-    store_id,
-    active,
-    username,
-    password,
+    StaffInfoDaoInstance.first_name,
+    StaffInfoDaoInstance.last_name,
+    StaffInfoDaoInstance.address_id,
+    StaffInfoDaoInstance.email,
+    StaffInfoDaoInstance.store_id,
+    StaffInfoDaoInstance.active,
+    StaffInfoDaoInstance.username,
+    StaffInfoDaoInstance.password,
   ];
   const client = await pool1.connect();
   const result = await client.query(createQuery, values);

@@ -22,40 +22,24 @@ const queries = {
     " DELETE FROM customer WHERE customer_id =$1 RETURNING * ",
 };
 
-async function customerCreateQuery(
-  first_name,
-  store_id,
-  last_name,
-  email,
-  address_id,
-  activebool,
-  create_date,
-  active
-) {
-  const { error } = validation.createCustomerSchema.validate({
-    first_name,
-    store_id,
-    last_name,
-    email,
-    address_id,
-    activebool,
-    create_date,
-    active,
-  });
+async function customerCreateQuery(CustomerInfoDaoInstance) {
+  const { error } = validation.createCustomerSchema.validate(
+    CustomerInfoDaoInstance
+  );
   if (error) {
     console.error("Validation error:", error.details[0].message);
     return;
   }
   const createQuery = queries.insertCustomer;
   const values = [
-    first_name,
-    store_id,
-    last_name,
-    email,
-    address_id,
-    activebool,
-    create_date,
-    active,
+    CustomerInfoDaoInstance.first_name,
+    CustomerInfoDaoInstance.store_id,
+    CustomerInfoDaoInstance.last_name,
+    CustomerInfoDaoInstance.email,
+    CustomerInfoDaoInstance.address_id,
+    CustomerInfoDaoInstance.activebool,
+    CustomerInfoDaoInstance.create_date,
+    CustomerInfoDaoInstance.active,
   ];
   const client = await pool1.connect();
   const result = await client.query(createQuery, values);

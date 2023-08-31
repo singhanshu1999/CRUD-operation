@@ -2,8 +2,6 @@ const express = require("express");
 
 const service = require("../service/storeService");
 
-//const validation = require("../validation/actorValidation");
-
 const router = express.Router();
 
 router.post("/create", async (req, res) => {

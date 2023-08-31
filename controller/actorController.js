@@ -2,16 +2,10 @@ const express = require("express");
 
 const service = require("../service/actorService");
 
-//const validation = require("../validation/actorValidation");
-
 const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    /* const { error } = validation.createActorSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
-    }*/
     const { first_name, last_name } = req.body;
     const newActor = await service.createActor(first_name, last_name);
     res.json(newActor);
@@ -44,10 +38,6 @@ router.get("/:actor_id", async (req, res) => {
 
 router.put("/update/:actor_id", async (req, res) => {
   try {
-    /* const { error } = validation.updateActorSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.details[0].message });
-    }*/
     const { actor_id } = req.params;
     const { first_name } = req.body;
     const modifyActor = await service.updateActor(actor_id, first_name);
