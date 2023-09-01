@@ -2,12 +2,14 @@ const express = require("express");
 
 const service = require("../service/actorService");
 
+const ActorInfoDao = require("../pojo/ActorInfo");
+
 const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    const { first_name, last_name } = req.body;
-    const newActor = await service.createActor(first_name, last_name);
+    const ActorInfoDaoInstance = new ActorInfoDao(req.body);
+    const newActor = await service.createActor(ActorInfoDaoInstance);
     res.json(newActor);
   } catch (error) {
     console.error("Error while creating record:", error);

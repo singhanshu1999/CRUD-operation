@@ -55,55 +55,58 @@ async function filmGetQuery() {
   return result.rows;
 }
 
-async function filmGetByIdQuery(film_id) {
+async function filmGetByIdQuery(FilmInfoDaoInstance) {
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [film_id]);
+  const checkResult = await client.query(checkQuery, [
+    FilmInfoDaoInstance.film_id,
+  ]);
   if (checkResult.rows.length === 0) {
     throw new Error("film id is not available");
   }
   const getByIdQuery = queries.getFilmById;
-  const values = [film_id];
+  const values = [FilmInfoDaoInstance.film_id];
   const result = await client.query(getByIdQuery, values);
   return result.rows[0];
 }
 
-async function filmUpdateQuery(
-  film_id,
-  description,
-  rental_duration,
-  rental_rate
-) {
-  const { error } = validation.updateFilmSchema.validate({
-    description,
-    rental_duration,
-    rental_rate,
-  });
+async function filmUpdateQuery(FilmInfoParamsInstance, FilmInfoDaoInstance) {
+  console.log("FIlmInfoDaoInstance: ", FilmInfoDaoInstance);
+  const { error } = validation.updateFilmSchema.validate(FilmInfoDaoInstance);
   if (error) {
     console.error("Validation error:", error.details[0].message);
     return;
   }
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [film_id]);
+  const checkResult = await client.query(checkQuery, [
+    FilmInfoParamsInstance.film_id,
+  ]);
   if (checkResult.rows.length === 0) {
     throw new Error("film id is not available");
   }
   const updateQuery = queries.updateFilmById;
-  const values = [description, rental_duration, rental_rate, film_id];
+  const values = [
+    FilmInfoDaoInstance.description,
+    FilmInfoDaoInstance.rental_duration,
+    FilmInfoDaoInstance.rental_rate,
+    FilmInfoParamsInstance.film_id,
+  ];
   const result = await client.query(updateQuery, values);
   return result.rows[0];
 }
 
-async function filmRemoveQuery(film_id) {
+async function filmRemoveQuery(FilmInfoParamsInstance) {
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [film_id]);
+  const checkResult = await client.query(checkQuery, [
+    FilmInfoParamsInstance.film_id,
+  ]);
   if (checkResult.rows.length === 0) {
     throw new Error("film id is not available");
   }
   const removeQuery = queries.removeFilmById;
-  const values = [film_id];
+  const values = [FilmInfoParamsInstance.film_id];
   const result = await client.query(removeQuery, values);
   return result.rows[0];
 }

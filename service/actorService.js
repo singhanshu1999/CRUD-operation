@@ -1,10 +1,7 @@
 const db = require("../connector/actorDb");
 
-async function createActor(first_name, last_name) {
-  const insertedActor = await db.actorCreateQuery({
-    first_name,
-    last_name,
-  });
+async function createActor(ActorInfoDaoInstance) {
+  const insertedActor = await db.actorCreateQuery(ActorInfoDaoInstance);
   return insertedActor;
 }
 

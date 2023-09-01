@@ -53,55 +53,62 @@ async function customerGetQuery() {
   return result.rows;
 }
 
-async function customerGetByIdQuery(customer_id) {
+async function customerGetByIdQuery(CustomerInfoInstance) {
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [customer_id]);
+  const checkResult = await client.query(checkQuery, [
+    CustomerInfoInstance.customer_id,
+  ]);
   if (checkResult.rows.length === 0) {
     throw new Error("customer id is not valid!!");
   }
   const getByIdQuery = queries.getCustomerById;
-  const values = [customer_id];
+  const values = [CustomerInfoInstance.customer_id];
   const result = await client.query(getByIdQuery, values);
   return result.rows[0];
 }
 
 async function customerUpdateQuery(
-  customer_id,
-  store_id,
-  first_name,
-  last_name
+  CustomerInfoInstance,
+  CustomerInfoDaoInstance
 ) {
-  const { error } = validation.updateCustomerSchema.validate({
-    store_id,
-    first_name,
-    last_name,
-  });
+  const { error } = validation.updateCustomerSchema.validate(
+    CustomerInfoDaoInstance
+  );
   if (error) {
     console.error("Validation error:", error.details[0].message);
     return;
   }
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [customer_id]);
+  const checkResult = await client.query(checkQuery, [
+    CustomerInfoInstance.customer_id,
+  ]);
   if (checkResult.rows.length === 0) {
     throw new Error("customer id is not valid!!");
   }
   const updateQuery = queries.updateCustomerById;
-  const values = [store_id, first_name, last_name, customer_id];
+  const values = [
+    CustomerInfoDaoInstance.store_id,
+    CustomerInfoDaoInstance.first_name,
+    CustomerInfoDaoInstance.last_name,
+    CustomerInfoInstance.customer_id,
+  ];
   const result = await client.query(updateQuery, values);
   return result.rows[0];
 }
 
-async function customerRemoveQuery(customer_id) {
+async function customerRemoveQuery(CustomerInfoInstance) {
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [customer_id]);
+  const checkResult = await client.query(checkQuery, [
+    CustomerInfoInstance.customer_id,
+  ]);
   if (checkResult.rows.length === 0) {
     throw new Error("customer id is not valid!!");
   }
   const removeQuery = queries.removeCustomerById;
-  const values = [customer_id];
+  const values = [CustomerInfoInstance.customer_id];
   const result = await client.query(removeQuery, values);
   return result.rows[0];
 }

@@ -12,23 +12,23 @@ async function getCustomer() {
   return gettedCustomer;
 }
 
-async function getCustomerById(customer_id) {
-  const gettedCustomerById = await db.customerGetByIdQuery(customer_id);
+async function getCustomerById(CustomerInfoInstance) {
+  const gettedCustomerById = await db.customerGetByIdQuery(
+    CustomerInfoInstance
+  );
   return gettedCustomerById;
 }
 
-async function updateCustomer(customer_id, store_id, first_name, last_name) {
+async function updateCustomer(CustomerInfoInstance, CustomerInfoDaoInstance) {
   const updatedCustomer = await db.customerUpdateQuery(
-    customer_id,
-    store_id,
-    first_name,
-    last_name
+    CustomerInfoInstance,
+    CustomerInfoDaoInstance
   );
   return updatedCustomer;
 }
 
-async function removeCustomer(customer_id) {
-  const removedCustomer = await db.customerRemoveQuery(customer_id);
+async function removeCustomer(CustomerInfoInstance) {
+  const removedCustomer = await db.customerRemoveQuery(CustomerInfoInstance);
   return removedCustomer;
 }
 

@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
 router.get("/:customer_id", async (req, res) => {
   try {
     const { customer_id } = req.params;
-    const fetchCustomerById = await service.getCustomerById(customer_id);
+    const fetchCustomerById = await service.getCustomerById(req.params);
     return res.json(fetchCustomerById);
   } catch (error) {
     console.error("error while fetching the address", error);
@@ -42,12 +42,7 @@ router.put("/update/:customer_id", async (req, res) => {
   try {
     const { customer_id } = req.params;
     const { store_id, first_name, last_name } = req.body;
-    const modifyCustomer = await service.updateCustomer(
-      customer_id,
-      store_id,
-      first_name,
-      last_name
-    );
+    const modifyCustomer = await service.updateCustomer(req.params, req.body);
     return res.json(modifyCustomer);
   } catch (error) {
     console.error("error while fetching the address", error);
@@ -58,7 +53,7 @@ router.put("/update/:customer_id", async (req, res) => {
 router.delete("/remove/:customer_id", async (req, res) => {
   try {
     const { customer_id } = req.params;
-    const deleteCustomer = await service.removeCustomer(customer_id);
+    const deleteCustomer = await service.removeCustomer(req.params);
     res.json(deleteCustomer);
   } catch (error) {
     console.error("error while fetching the address", error);

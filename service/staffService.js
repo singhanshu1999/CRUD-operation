@@ -10,23 +10,21 @@ async function getStaff() {
   return gettedStaff;
 }
 
-async function getStaffById(staff_id) {
-  const gettedByIdStaff = await db.staffGetByIdQuery(staff_id);
+async function getStaffById(StaffInfoInstance) {
+  const gettedByIdStaff = await db.staffGetByIdQuery(StaffInfoInstance);
   return gettedByIdStaff;
 }
 
-async function updatestaff(staff_id, first_name, username, password) {
+async function updatestaff(StaffInfoInstance, StaffInfoDaoInstance) {
   const updatedStaff = await db.staffUpdateQuery(
-    staff_id,
-    first_name,
-    username,
-    password
+    StaffInfoInstance,
+    StaffInfoDaoInstance
   );
   return updatedStaff;
 }
 
-async function removeStaff(staff_id) {
-  const removedStaff = await db.staffRemoveQuery(staff_id);
+async function removeStaff(StaffInfoInstance) {
+  const removedStaff = await db.staffRemoveQuery(StaffInfoInstance);
   return removedStaff;
 }
 

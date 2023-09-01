@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
 router.get("/:address_id", async (req, res) => {
   try {
     const { address_id } = req.params;
-    const fetchAddressById = await service.getAddressById(address_id);
+    const fetchAddressById = await service.getAddressById(req.params);
     res.json(fetchAddressById);
   } catch (error) {
     console.error("error while fetching the address", error);
@@ -42,12 +42,7 @@ router.put("/update/:address_id", async (req, res) => {
   try {
     const { address_id } = req.params;
     const { address, address2, district } = req.body;
-    const modifyAddress = await service.updateAddress(
-      address_id,
-      address,
-      address2,
-      district
-    );
+    const modifyAddress = await service.updateAddress(req.params, req.body);
     res.json(modifyAddress);
   } catch (error) {
     console.error("error while fetching the address", error);
@@ -58,7 +53,7 @@ router.put("/update/:address_id", async (req, res) => {
 router.delete("/remove/:address_id", async (req, res) => {
   try {
     const { address_id } = req.params;
-    const deleteAddress = await service.removeAddress(address_id);
+    const deleteAddress = await service.removeAddress(req.params);
     res.json(deleteAddress);
   } catch (error) {
     console.error("error while fetching the address", error);

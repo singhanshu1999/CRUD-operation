@@ -10,23 +10,21 @@ async function getFilm() {
   return gettedFilm;
 }
 
-async function getFilmById(film_id) {
-  const gettedFilmById = await db.filmGetByIdQuery(film_id);
+async function getFilmById(FilmInfoDaoInstance) {
+  const gettedFilmById = await db.filmGetByIdQuery(FilmInfoDaoInstance);
   return gettedFilmById;
 }
 
-async function updateFilm(film_id, description, rental_duration, rental_rate) {
+async function updateFilm(FilmInfoParamsInstance, FilmInfoDaoInstance) {
   const updatedFilm = await db.filmUpdateQuery(
-    film_id,
-    description,
-    rental_duration,
-    rental_rate
+    FilmInfoParamsInstance,
+    FilmInfoDaoInstance
   );
   return updatedFilm;
 }
 
-async function removeFilm(film_id) {
-  const removedFilm = await db.filmRemoveQuery(film_id);
+async function removeFilm(FilmInfoParamsInstance) {
+  const removedFilm = await db.filmRemoveQuery(FilmInfoParamsInstance);
   return removedFilm;
 }
 

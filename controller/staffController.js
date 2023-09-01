@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
 router.get("/:staff_id", async (req, res) => {
   try {
     const { staff_id } = req.params;
-    const fetchStaffById = await service.getStaffById(staff_id);
+    const fetchStaffById = await service.getStaffById(req.params);
     return res.json(fetchStaffById);
   } catch (error) {
     console.error("error while fetching the staff", error);
@@ -42,12 +42,7 @@ router.put("/update/:staff_id", async (req, res) => {
   try {
     const { staff_id } = req.params;
     const { first_name, username, password } = req.body;
-    const modifyStaff = await service.updatestaff(
-      staff_id,
-      first_name,
-      username,
-      password
-    );
+    const modifyStaff = await service.updatestaff(req.params, req.body);
     return res.json(modifyStaff);
   } catch (error) {
     console.error("error while updating the staff", error);
@@ -58,7 +53,7 @@ router.put("/update/:staff_id", async (req, res) => {
 router.delete("/remove/:staff_id", async (req, res) => {
   try {
     const { staff_id } = req.params;
-    const deleteStaff = await service.removeStaff(staff_id);
+    const deleteStaff = await service.removeStaff(req.params);
     res.json(deleteStaff);
   } catch (error) {
     console.error("error while deleting the staff", error);

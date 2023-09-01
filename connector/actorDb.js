@@ -21,18 +21,19 @@ const queries = {
   removeActorById: " DELETE FROM actor WHERE actor_id = $1 RETURNING * ",
 };
 
-async function actorCreateQuery(actorData) {
-  const { first_name, last_name } = actorData;
-  const { error } = validation.createActorSchema.validate({
-    first_name: first_name,
-    last_name: last_name,
-  });
+async function actorCreateQuery(ActorInfoDaoInstance) {
+  //const { first_name, last_name } = actorData;
+  console.log("ActorInfoDaoInstance: ", ActorInfoDaoInstance);
+  const { error } = validation.createActorSchema.validate(ActorInfoDaoInstance);
   if (error) {
     console.error("Validation error:", error.details[0].message);
     return;
   }
   const insertQuery = queries.insertActor;
-  const values = [first_name, last_name];
+  const values = [
+    ActorInfoDaoInstance.first_name,
+    ActorInfoDaoInstance.last_name,
+  ];
   const client = await pool1.connect();
   const result = await client.query(insertQuery, values);
   return result.rows[0];

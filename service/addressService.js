@@ -10,17 +10,15 @@ async function getAddress() {
   return gettedAddress;
 }
 
-async function getAddressById(address_id) {
-  const gettedAddressById = await db.addressGetByIdQuery(address_id);
+async function getAddressById(AddressInfoInstance) {
+  const gettedAddressById = await db.addressGetByIdQuery(AddressInfoInstance);
   return gettedAddressById;
 }
 
-async function updateAddress(address_id, address, address2, district) {
+async function updateAddress(AddressInfoInstance, AddressInfoDaoInstance) {
   const updatedAddress = await db.addressUpdateQuery(
-    address_id,
-    address,
-    address2,
-    district
+    AddressInfoInstance,
+    AddressInfoDaoInstance
   );
   return updatedAddress;
 }

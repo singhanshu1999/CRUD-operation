@@ -10,23 +10,21 @@ async function getRental() {
   return gettedRental;
 }
 
-async function getRentalById(rental_id) {
-  const gettedRentalById = await db.rentalGetByIdQuery(rental_id);
+async function getRentalById(RentalInfoInstance) {
+  const gettedRentalById = await db.rentalGetByIdQuery(RentalInfoInstance);
   return gettedRentalById;
 }
 
-async function updateRental(rental_id, rental_date, customer_id, return_date) {
+async function updateRental(RentalInfoInstance, RentalInfoDaoInstance) {
   const updatedRental = await db.rentalUpdateQuery(
-    rental_id,
-    rental_date,
-    customer_id,
-    return_date
+    RentalInfoInstance,
+    RentalInfoDaoInstance
   );
   return updatedRental;
 }
 
-async function removeRental(rental_id) {
-  const removedRental = await db.rentalRemoveQuery(rental_id);
+async function removeRental(RentalInfoInstance) {
+  const removedRental = await db.rentalRemoveQuery(RentalInfoInstance);
   return removedRental;
 }
 
