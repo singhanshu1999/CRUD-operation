@@ -21,22 +21,22 @@ const queries = {
   removeStaffById: " DELETE FROM staff WHERE staff_id = $1 RETURNING * ",
 };
 
-async function staffCreateQuery(StaffInfoDaoInstance) {
-  const { error } = validation.createStaffSchema.validate(StaffInfoDaoInstance);
+async function staffCreateQuery(staffInfoDaoInstance) {
+  const { error } = validation.createStaffSchema.validate(staffInfoDaoInstance);
   if (error) {
     console.error("Validation error:", error.details[0].message);
     return;
   }
   const createQuery = queries.insertStaff;
   const values = [
-    StaffInfoDaoInstance.first_name,
-    StaffInfoDaoInstance.last_name,
-    StaffInfoDaoInstance.address_id,
-    StaffInfoDaoInstance.email,
-    StaffInfoDaoInstance.store_id,
-    StaffInfoDaoInstance.active,
-    StaffInfoDaoInstance.username,
-    StaffInfoDaoInstance.password,
+    staffInfoDaoInstance.first_name,
+    staffInfoDaoInstance.last_name,
+    staffInfoDaoInstance.address_id,
+    staffInfoDaoInstance.email,
+    staffInfoDaoInstance.store_id,
+    staffInfoDaoInstance.active,
+    staffInfoDaoInstance.username,
+    staffInfoDaoInstance.password,
   ];
   const client = await pool1.connect();
   const result = await client.query(createQuery, values);
@@ -50,23 +50,23 @@ async function staffGetQuery() {
   return result.rows;
 }
 
-async function staffGetByIdQuery(StaffInfoInstance) {
+async function staffGetByIdQuery(staffInfoInstance) {
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
   const checkResult = await client.query(checkQuery, [
-    StaffInfoInstance.staff_id,
+    staffInfoInstance.staff_id,
   ]);
   if (checkResult.rows.length === 0) {
     throw new Error("staff id is not valid!!");
   }
   const getByIdQuery = queries.getStaffById;
-  const values = [StaffInfoInstance.staff_id];
+  const values = [staffInfoInstance.staff_id];
   const result = await client.query(getByIdQuery, values);
   return result.rows[0];
 }
 
-async function staffUpdateQuery(StaffInfoInstance, StaffInfoDaoInstance) {
-  const { error } = validation.updateStaffSchema.validate(StaffInfoDaoInstance);
+async function staffUpdateQuery(staffInfoInstance, staffInfoDaoInstance) {
+  const { error } = validation.updateStaffSchema.validate(staffInfoDaoInstance);
   if (error) {
     console.error("Validation error:", error.details[0].message);
     return;
@@ -74,33 +74,33 @@ async function staffUpdateQuery(StaffInfoInstance, StaffInfoDaoInstance) {
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
   const checkResult = await client.query(checkQuery, [
-    StaffInfoInstance.staff_id,
+    staffInfoInstance.staff_id,
   ]);
   if (checkResult.rows.length === 0) {
     throw new Error("staff id is not valid!!");
   }
   const updateQuery = queries.updateStaffById;
   const values = [
-    StaffInfoDaoInstance.first_name,
-    StaffInfoDaoInstance.username,
-    StaffInfoDaoInstance.password,
-    StaffInfoInstance.staff_id,
+    staffInfoDaoInstance.first_name,
+    staffInfoDaoInstance.username,
+    staffInfoDaoInstance.password,
+    staffInfoInstance.staff_id,
   ];
   const result = await client.query(updateQuery, values);
   return result.rows[0];
 }
 
-async function staffRemoveQuery(StaffInfoInstance) {
+async function staffRemoveQuery(staffInfoInstance) {
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
   const checkResult = await client.query(checkQuery, [
-    StaffInfoInstance.staff_id,
+    staffInfoInstance.staff_id,
   ]);
   if (checkResult.rows.length === 0) {
     throw new Error("staff id is not valid!!");
   }
   const removeQuery = queries.removeStaffById;
-  const values = [StaffInfoInstance.staff_id];
+  const values = [staffInfoInstance.staff_id];
   const result = await client.query(removeQuery, values);
   return result.rows[0];
 }

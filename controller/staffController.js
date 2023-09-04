@@ -8,8 +8,8 @@ const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    const StaffInfoDaoInstance = new StaffInfoDao(req.body);
-    const newStaff = await service.createStaff(StaffInfoDaoInstance);
+    const staffInfoDaoInstance = new StaffInfoDao(req.body);
+    const newStaff = await service.createStaff(staffInfoDaoInstance);
     res.json(newStaff);
   } catch (error) {
     console.error("error while creating the staff", error);

@@ -1,7 +1,7 @@
 const db = require("../connector/staffDb");
 
-async function createStaff(StaffInfoDaoInstance) {
-  const insertedStaff = await db.staffCreateQuery(StaffInfoDaoInstance);
+async function createStaff(staffInfoDaoInstance) {
+  const insertedStaff = await db.staffCreateQuery(staffInfoDaoInstance);
   return insertedStaff;
 }
 
@@ -10,21 +10,21 @@ async function getStaff() {
   return gettedStaff;
 }
 
-async function getStaffById(StaffInfoInstance) {
-  const gettedByIdStaff = await db.staffGetByIdQuery(StaffInfoInstance);
+async function getStaffById(staffInfoInstance) {
+  const gettedByIdStaff = await db.staffGetByIdQuery(staffInfoInstance);
   return gettedByIdStaff;
 }
 
-async function updatestaff(StaffInfoInstance, StaffInfoDaoInstance) {
+async function updatestaff(staffInfoInstance, staffInfoDaoInstance) {
   const updatedStaff = await db.staffUpdateQuery(
-    StaffInfoInstance,
-    StaffInfoDaoInstance
+    staffInfoInstance,
+    staffInfoDaoInstance
   );
   return updatedStaff;
 }
 
-async function removeStaff(StaffInfoInstance) {
-  const removedStaff = await db.staffRemoveQuery(StaffInfoInstance);
+async function removeStaff(staffInfoInstance) {
+  const removedStaff = await db.staffRemoveQuery(staffInfoInstance);
   return removedStaff;
 }
 

@@ -21,18 +21,16 @@ const queries = {
   removeActorById: " DELETE FROM actor WHERE actor_id = $1 RETURNING * ",
 };
 
-async function actorCreateQuery(ActorInfoDaoInstance) {
-  //const { first_name, last_name } = actorData;
-  console.log("ActorInfoDaoInstance: ", ActorInfoDaoInstance);
-  const { error } = validation.createActorSchema.validate(ActorInfoDaoInstance);
+async function actorCreateQuery(actorInfoDaoInstance) {
+  const { error } = validation.createActorSchema.validate(actorInfoDaoInstance);
   if (error) {
     console.error("Validation error:", error.details[0].message);
     return;
   }
   const insertQuery = queries.insertActor;
   const values = [
-    ActorInfoDaoInstance.first_name,
-    ActorInfoDaoInstance.last_name,
+    actorInfoDaoInstance.first_name,
+    actorInfoDaoInstance.last_name,
   ];
   const client = await pool1.connect();
   const result = await client.query(insertQuery, values);
@@ -46,48 +44,52 @@ async function actorGetQuery() {
   return result.rows;
 }
 
-async function actorGetByIdQuery(actor_id) {
+async function actorGetByIdQuery(actorInfoInstance) {
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [actor_id]);
+  const checkResult = await client.query(checkQuery, [
+    actorInfoInstance.actor_id,
+  ]);
   if (checkResult.rows.length === 0) {
     throw new Error("actor id is not valid!!");
   }
   const getByIdQuery = queries.getActorById;
-  const values = [actor_id];
+  const values = [actorInfoInstance.actor_id];
   const result = await client.query(getByIdQuery, values);
   return result.rows[0];
 }
 
-async function actorUpdateQuery(actor_id, first_name) {
-  const { error } = validation.updateActorSchema.validate({
-    first_name: first_name,
-  });
+async function actorUpdateQuery(actorInfoInstance, actorInfoDaoInstance) {
+  const { error } = validation.updateActorSchema.validate(actorInfoDaoInstance);
   if (error) {
     console.error("Validation error:", error.details[0].message);
     return;
   }
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [actor_id]);
+  const checkResult = await client.query(checkQuery, [
+    actorInfoInstance.actor_id,
+  ]);
   if (checkResult.rows.length === 0) {
     throw new Error("actor id is not valid!!");
   }
   const updateQuery = queries.updateActorById;
-  const values = [first_name, actor_id];
+  const values = [actorInfoDaoInstance.first_name, actorInfoInstance.actor_id];
   const result = await client.query(updateQuery, values);
   return result.rows[0];
 }
 
-async function actorRemoveQuery(actor_id) {
+async function actorRemoveQuery(actorInfoInstance) {
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [actor_id]);
+  const checkResult = await client.query(checkQuery, [
+    actorInfoInstance.actor_id,
+  ]);
   if (checkResult.rows.length === 0) {
     throw new Error("actor id is not valid!!");
   }
   const removeQuery = queries.removeActorById;
-  const values = [actor_id];
+  const values = [actorInfoInstance.actor_id];
   const result = await client.query(removeQuery, values);
   return result.rows[0];
 }

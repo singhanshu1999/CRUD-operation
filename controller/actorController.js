@@ -8,8 +8,8 @@ const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    const ActorInfoDaoInstance = new ActorInfoDao(req.body);
-    const newActor = await service.createActor(ActorInfoDaoInstance);
+    const actorInfoDaoInstance = new ActorInfoDao(req.body);
+    const newActor = await service.createActor(actorInfoDaoInstance);
     res.json(newActor);
   } catch (error) {
     console.error("Error while creating record:", error);
@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
 router.get("/:actor_id", async (req, res) => {
   try {
     const { actor_id } = req.params;
-    const fetchActorById = await service.getActorById(actor_id);
+    const fetchActorById = await service.getActorById(req.params);
     res.json(fetchActorById);
   } catch (error) {
     console.error("error while retrieving the data", error);
@@ -42,7 +42,7 @@ router.put("/update/:actor_id", async (req, res) => {
   try {
     const { actor_id } = req.params;
     const { first_name } = req.body;
-    const modifyActor = await service.updateActor(actor_id, first_name);
+    const modifyActor = await service.updateActor(req.params, req.body);
     res.json(modifyActor);
   } catch (error) {
     console.error("Error while updating record:", error);
@@ -53,7 +53,7 @@ router.put("/update/:actor_id", async (req, res) => {
 router.delete("/remove/:actor_id", async (req, res) => {
   try {
     const { actor_id } = req.params;
-    const deleteActor = await service.removeActor(actor_id);
+    const deleteActor = await service.removeActor(req.params);
     res.json(deleteActor);
   } catch (error) {
     console.error("erroe while deleting the record", error);

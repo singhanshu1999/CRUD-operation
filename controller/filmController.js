@@ -8,8 +8,8 @@ const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    const FilmInfoDaoInstance = new FilmInfoDao(req.body);
-    const newFilm = await service.createFilm(FilmInfoDaoInstance);
+    const filmInfoDaoInstance = new FilmInfoDao(req.body);
+    const newFilm = await service.createFilm(filmInfoDaoInstance);
     return res.json(newFilm);
   } catch (error) {
     console.error("error while fetching the film", error);

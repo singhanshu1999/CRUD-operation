@@ -8,8 +8,8 @@ const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    const CustomerInfoDaoInstance = new CustomerInfoDao(req.body);
-    const newCustomer = await service.createCustomer(CustomerInfoDaoInstance);
+    const customerInfoDaoInstance = new CustomerInfoDao(req.body);
+    const newCustomer = await service.createCustomer(customerInfoDaoInstance);
     return res.json(newCustomer);
   } catch (error) {
     console.error("error while fetching the address", error);

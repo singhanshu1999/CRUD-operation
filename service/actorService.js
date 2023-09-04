@@ -1,7 +1,7 @@
 const db = require("../connector/actorDb");
 
-async function createActor(ActorInfoDaoInstance) {
-  const insertedActor = await db.actorCreateQuery(ActorInfoDaoInstance);
+async function createActor(actorInfoDaoInstance) {
+  const insertedActor = await db.actorCreateQuery(actorInfoDaoInstance);
   return insertedActor;
 }
 
@@ -10,18 +10,21 @@ async function getActor() {
   return gettedActor;
 }
 
-async function getActorById(actor_id) {
-  const gettedActorById = await db.actorGetByIdQuery(actor_id);
+async function getActorById(actorInfoInstance) {
+  const gettedActorById = await db.actorGetByIdQuery(actorInfoInstance);
   return gettedActorById;
 }
 
-async function updateActor(actor_id, first_name) {
-  const updatedActor = await db.actorUpdateQuery(actor_id, first_name);
+async function updateActor(actorInfoInstance, actorInfoDaoInstance) {
+  const updatedActor = await db.actorUpdateQuery(
+    actorInfoInstance,
+    actorInfoDaoInstance
+  );
   return updatedActor;
 }
 
-async function removeActor(actor_id) {
-  const removedActor = await db.actorRemoveQuery(actor_id);
+async function removeActor(actorInfoInstance) {
+  const removedActor = await db.actorRemoveQuery(actorInfoInstance);
   return removedActor;
 }
 

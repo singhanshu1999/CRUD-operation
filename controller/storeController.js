@@ -8,8 +8,8 @@ const router = express.Router();
 
 router.post("/create", async (req, res) => {
   try {
-    const StoreInfoDaoInstance = new StoreInfoDao(req.body);
-    const newStore = await service.createStore(StoreInfoDaoInstance);
+    const storeInfoDaoInstance = new StoreInfoDao(req.body);
+    const newStore = await service.createStore(storeInfoDaoInstance);
     res.json(newStore);
   } catch (error) {
     console.error("Error while creating store:", error);

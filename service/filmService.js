@@ -1,7 +1,7 @@
 const db = require("../connector/filmDb");
 
-async function createFilm(FilmInfoDaoInstance) {
-  const insertedFilm = await db.filmCreateQuery(FilmInfoDaoInstance);
+async function createFilm(filmInfoDaoInstance) {
+  const insertedFilm = await db.filmCreateQuery(filmInfoDaoInstance);
   return insertedFilm;
 }
 
@@ -10,21 +10,21 @@ async function getFilm() {
   return gettedFilm;
 }
 
-async function getFilmById(FilmInfoDaoInstance) {
-  const gettedFilmById = await db.filmGetByIdQuery(FilmInfoDaoInstance);
+async function getFilmById(filmInfoDaoInstance) {
+  const gettedFilmById = await db.filmGetByIdQuery(filmInfoDaoInstance);
   return gettedFilmById;
 }
 
-async function updateFilm(FilmInfoParamsInstance, FilmInfoDaoInstance) {
+async function updateFilm(filmInfoParamsInstance, filmInfoDaoInstance) {
   const updatedFilm = await db.filmUpdateQuery(
-    FilmInfoParamsInstance,
-    FilmInfoDaoInstance
+    filmInfoParamsInstance,
+    filmInfoDaoInstance
   );
   return updatedFilm;
 }
 
-async function removeFilm(FilmInfoParamsInstance) {
-  const removedFilm = await db.filmRemoveQuery(FilmInfoParamsInstance);
+async function removeFilm(filmInfoParamsInstance) {
+  const removedFilm = await db.filmRemoveQuery(filmInfoParamsInstance);
   return removedFilm;
 }
 

@@ -21,9 +21,9 @@ const queries = {
   removeAddressById: " DELETE FROM address WHERE address_id = $1 RETURNING * ",
 };
 
-async function addressCreateQuery(AddressInfoDaoInstance) {
+async function addressCreateQuery(addressInfoDaoInstance) {
   const { error } = validation.createAddressSchema.validate(
-    AddressInfoDaoInstance
+    addressInfoDaoInstance
   );
   if (error) {
     console.error("Validation error:", error.details[0].message);
@@ -31,12 +31,12 @@ async function addressCreateQuery(AddressInfoDaoInstance) {
   }
   const insertQuery = queries.insertAddress;
   const values = [
-    AddressInfoDaoInstance.address,
-    AddressInfoDaoInstance.address2,
-    AddressInfoDaoInstance.district,
-    AddressInfoDaoInstance.city_id,
-    AddressInfoDaoInstance.postal_code,
-    AddressInfoDaoInstance.phone,
+    addressInfoDaoInstance.address,
+    addressInfoDaoInstance.address2,
+    addressInfoDaoInstance.district,
+    addressInfoDaoInstance.city_id,
+    addressInfoDaoInstance.postal_code,
+    addressInfoDaoInstance.phone,
   ];
   const client = await pool1.connect();
   const result = await client.query(insertQuery, values);
@@ -50,24 +50,24 @@ async function addressGetQuery() {
   return result.rows;
 }
 
-async function addressGetByIdQuery(AddressInfoInstance) {
+async function addressGetByIdQuery(addressInfoInstance) {
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
   const checkResult = await client.query(checkQuery, [
-    AddressInfoInstance.address_id,
+    addressInfoInstance.address_id,
   ]);
   if (checkResult.rows.length === 0) {
     throw new Error("address id is not valid!!");
   }
   const getByIdQuery = queries.getAddressById;
-  const values = [AddressInfoInstance.address_id];
+  const values = [addressInfoInstance.address_id];
   const result = await client.query(getByIdQuery, values);
   return result.rows[0];
 }
 
-async function addressUpdateQuery(AddressInfoInstance, AddressInfoDaoInstance) {
+async function addressUpdateQuery(addressInfoInstance, addressInfoDaoInstance) {
   const { error } = validation.updateAddressSchema.validate(
-    AddressInfoDaoInstance
+    addressInfoDaoInstance
   );
   if (error) {
     console.error("Validation error:", error.details[0].message);
@@ -76,33 +76,33 @@ async function addressUpdateQuery(AddressInfoInstance, AddressInfoDaoInstance) {
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
   const checkResult = await client.query(checkQuery, [
-    AddressInfoInstance.address_id,
+    addressInfoInstance.address_id,
   ]);
   if (checkResult.rows.length === 0) {
     throw new Error("address id is not valid!!");
   }
   const updateQuery = queries.updateAddressById;
   const values = [
-    AddressInfoDaoInstance.address,
-    AddressInfoDaoInstance.address2,
-    AddressInfoDaoInstance.district,
-    AddressInfoInstance.address_id,
+    addressInfoDaoInstance.address,
+    addressInfoDaoInstance.address2,
+    addressInfoDaoInstance.district,
+    addressInfoInstance.address_id,
   ];
   const result = await client.query(updateQuery, values);
   return result.rows[0];
 }
 
-async function addressRemoveQuery(AddressInfoInstance) {
+async function addressRemoveQuery(addressInfoInstance) {
   const checkQuery = queries.findIdQuery;
   const client = await pool1.connect();
   const checkResult = await client.query(checkQuery, [
-    AddressInfoInstance.address_id,
+    addressInfoInstance.address_id,
   ]);
   if (checkResult.rows.length === 0) {
     throw new Error("address id is not valid!!");
   }
   const removeQuery = queries.removeAddressById;
-  const values = [AddressInfoInstance.address_id];
+  const values = [addressInfoInstance.address_id];
   const result = await client.query(removeQuery, values);
   return result.rows[0];
 }
