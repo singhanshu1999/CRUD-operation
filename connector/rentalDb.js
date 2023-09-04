@@ -22,88 +22,113 @@ const queries = {
 };
 
 async function rentalCreateQuery(rentalInfoDaoInstance) {
-  const { error } = validation.createRentalSchema.validate(
-    rentalInfoDaoInstance
-  );
-  if (error) {
-    console.error("Validation error:", error.details[0].message);
-    return;
+  try {
+    const { error } = validation.createRentalSchema.validate(
+      rentalInfoDaoInstance
+    );
+    if (error) {
+      console.error("Validation error:", error.details[0].message);
+      return;
+    }
+    const createQuery = queries.insertRental;
+    const values = [
+      rentalInfoDaoInstance.rental_date,
+      rentalInfoDaoInstance.inventory_id,
+      rentalInfoDaoInstance.customer_id,
+      rentalInfoDaoInstance.return_date,
+      rentalInfoDaoInstance.staff_id,
+    ];
+    const client = await pool1.connect();
+    const result = await client.query(createQuery, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error in rentalCreateQuery:", error.message);
+    return null;
   }
-  const createQuery = queries.insertRental;
-  const values = [
-    rentalInfoDaoInstance.rental_date,
-    rentalInfoDaoInstance.inventory_id,
-    rentalInfoDaoInstance.customer_id,
-    rentalInfoDaoInstance.return_date,
-    rentalInfoDaoInstance.staff_id,
-  ];
-  const client = await pool1.connect();
-  const result = await client.query(createQuery, values);
-  return result.rows[0];
 }
 
 async function rentalGetQuery() {
-  const getQuery = queries.gettingRental;
-  const client = await pool1.connect();
-  const result = await client.query(getQuery);
-  return result.rows;
+  try {
+    const getQuery = queries.gettingRental;
+    const client = await pool1.connect();
+    const result = await client.query(getQuery);
+    return result.rows;
+  } catch (error) {
+    console.error("Error in rentalGetQuery:", error.message);
+    return null;
+  }
 }
 
 async function rentalGetByIdQuery(rentalInfoInstance) {
-  const checkQuery = queries.findIdQuery;
-  const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [
-    rentalInfoInstance.rental_id,
-  ]);
-  if (checkResult.rows.length === 0) {
-    throw new Error("rental id is not valid!!");
+  try {
+    const checkQuery = queries.findIdQuery;
+    const client = await pool1.connect();
+    const checkResult = await client.query(checkQuery, [
+      rentalInfoInstance.rental_id,
+    ]);
+    if (checkResult.rows.length === 0) {
+      throw new Error("rental id is not valid!!");
+    }
+    const getByIdQuery = queries.getRentalById;
+    const values = [rentalInfoInstance.rental_id];
+    const result = await client.query(getByIdQuery, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error in rentalGetByIdQuery:", error.message);
+    return null;
   }
-  const getByIdQuery = queries.getRentalById;
-  const values = [rentalInfoInstance.rental_id];
-  const result = await client.query(getByIdQuery, values);
-  return result.rows[0];
 }
 
 async function rentalUpdateQuery(rentalInfoInstance, rentalInfoDaoInstance) {
-  const { error } = validation.updateRentalSchema.validate(
-    rentalInfoDaoInstance
-  );
-  if (error) {
-    console.error("Validation error:", error.details[0].message);
-    return;
+  try {
+    const { error } = validation.updateRentalSchema.validate(
+      rentalInfoDaoInstance
+    );
+    if (error) {
+      console.error("Validation error:", error.details[0].message);
+      return;
+    }
+    const checkQuery = queries.findIdQuery;
+    const client = await pool1.connect();
+    const checkResult = await client.query(checkQuery, [
+      rentalInfoInstance.rental_id,
+    ]);
+    if (checkResult.rows.length === 0) {
+      throw new Error("rental id is not valid!!");
+    }
+    const updateQuery = queries.updateRentalById;
+    const values = [
+      rentalInfoDaoInstance.rental_date,
+      rentalInfoDaoInstance.customer_id,
+      rentalInfoDaoInstance.return_date,
+      rentalInfoInstance.rental_id,
+    ];
+    const result = await client.query(updateQuery, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error in rentalUpdateQuery:", error.message);
+    return null;
   }
-  const checkQuery = queries.findIdQuery;
-  const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [
-    rentalInfoInstance.rental_id,
-  ]);
-  if (checkResult.rows.length === 0) {
-    throw new Error("rental id is not valid!!");
-  }
-  const updateQuery = queries.updateRentalById;
-  const values = [
-    rentalInfoDaoInstance.rental_date,
-    rentalInfoDaoInstance.customer_id,
-    rentalInfoDaoInstance.return_date,
-    rentalInfoInstance.rental_id,
-  ];
-  const result = await client.query(updateQuery, values);
-  return result.rows[0];
 }
 
 async function rentalRemoveQuery(rentalInfoInstance) {
-  const checkQuery = queries.findIdQuery;
-  const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [
-    rentalInfoInstance.rental_id,
-  ]);
-  if (checkResult.rows.length === 0) {
-    throw new Error("rental id is not valid!!");
+  try {
+    const checkQuery = queries.findIdQuery;
+    const client = await pool1.connect();
+    const checkResult = await client.query(checkQuery, [
+      rentalInfoInstance.rental_id,
+    ]);
+    if (checkResult.rows.length === 0) {
+      throw new Error("rental id is not valid!!");
+    }
+    const removeQuery = queries.removeRentalById;
+    const values = [rentalInfoInstance.rental_id];
+    const result = await client.query(removeQuery, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error in rentalUpdateQuery:", error.message);
+    return null;
   }
-  const removeQuery = queries.removeRentalById;
-  const values = [rentalInfoInstance.rental_id];
-  const result = await client.query(removeQuery, values);
-  return result.rows[0];
 }
 
 module.exports = {

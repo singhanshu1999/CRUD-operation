@@ -19,66 +19,94 @@ const queries = {
 };
 
 async function storeCreateQuery(storeInfoDaoInstance) {
-  const insertQuery = queries.insertStore;
-  const values = [
-    storeInfoDaoInstance.manager_staff_id,
-    storeInfoDaoInstance.address_id,
-  ];
-  const client = await pool1.connect();
-  const result = await client.query(insertQuery, values);
-  return result.rows[0];
+  try {
+    const insertQuery = queries.insertStore;
+    const values = [
+      storeInfoDaoInstance.manager_staff_id,
+      storeInfoDaoInstance.address_id,
+    ];
+    const client = await pool1.connect();
+    const result = await client.query(insertQuery, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error in storeCreateQuery:", error.message);
+    return null;
+  }
 }
 
 async function storeGetQuery() {
-  const getQuery = queries.gettingStore;
-  const client = await pool1.connect();
-  const result = await client.query(getQuery);
-  return result.rows;
+  try {
+    const getQuery = queries.gettingStore;
+    const client = await pool1.connect();
+    const result = await client.query(getQuery);
+    return result.rows;
+  } catch (error) {
+    console.error("Error in storeGetQuery:", error.message);
+    return null;
+  }
 }
 
 async function storeGetByIdQuery(storeInfoInstance) {
-  const checkQuery = queries.findIdQuery;
-  const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [
-    storeInfoInstance.store_id,
-  ]);
-  if (checkResult.rows.length === 0) {
-    throw new Error("store id is not valid!!");
+  try {
+    const checkQuery = queries.findIdQuery;
+    const client = await pool1.connect();
+    const checkResult = await client.query(checkQuery, [
+      storeInfoInstance.store_id,
+    ]);
+    if (checkResult.rows.length === 0) {
+      throw new Error("store id is not valid!!");
+    }
+    const getByIdQuery = queries.getStoreById;
+    const values = [storeInfoInstance.store_id];
+    const result = await client.query(getByIdQuery, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error in storeGetByIdQuery:", error.message);
+    return null;
   }
-  const getByIdQuery = queries.getStoreById;
-  const values = [storeInfoInstance.store_id];
-  const result = await client.query(getByIdQuery, values);
-  return result.rows[0];
 }
 
 async function storeUpdateQuery(storeInfoInstance, storeInfoDaoInstance) {
-  const checkQuery = queries.findIdQuery;
-  const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [
-    storeInfoInstance.store_id,
-  ]);
-  if (checkResult.rows.length === 0) {
-    throw new Error("store id is not valid!!");
+  try {
+    const checkQuery = queries.findIdQuery;
+    const client = await pool1.connect();
+    const checkResult = await client.query(checkQuery, [
+      storeInfoInstance.store_id,
+    ]);
+    if (checkResult.rows.length === 0) {
+      throw new Error("store id is not valid!!");
+    }
+    const updateQuery = queries.updateStoreById;
+    const values = [
+      storeInfoInstance.store_id,
+      storeInfoDaoInstance.address_id,
+    ];
+    const result = await client.query(updateQuery, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error in storeUpdateQuery:", error.message);
+    return null;
   }
-  const updateQuery = queries.updateStoreById;
-  const values = [storeInfoInstance.store_id, storeInfoDaoInstance.address_id];
-  const result = await client.query(updateQuery, values);
-  return result.rows[0];
 }
 
 async function storeRemoveQuery(storeInfoInstance) {
-  const checkQuery = queries.findIdQuery;
-  const client = await pool1.connect();
-  const checkResult = await client.query(checkQuery, [
-    storeInfoInstance.store_id,
-  ]);
-  if (checkResult.rows.length === 0) {
-    throw new Error("store id is not valid!!");
+  try {
+    const checkQuery = queries.findIdQuery;
+    const client = await pool1.connect();
+    const checkResult = await client.query(checkQuery, [
+      storeInfoInstance.store_id,
+    ]);
+    if (checkResult.rows.length === 0) {
+      throw new Error("store id is not valid!!");
+    }
+    const removeQuery = queries.removeStoreById;
+    const values = [storeInfoInstance.store_id];
+    const result = await client.query(removeQuery, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error in storeRemoveQuery:", error.message);
+    return null;
   }
-  const removeQuery = queries.removeStoreById;
-  const values = [storeInfoInstance.store_id];
-  const result = await client.query(removeQuery, values);
-  return result.rows[0];
 }
 
 module.exports = {
