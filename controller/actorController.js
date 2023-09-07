@@ -1,10 +1,52 @@
 const express = require("express");
 
+const multer = require("multer");
+
+const csv = require("csv-parser");
+
+const fs = require("fs");
+
 const service = require("../service/actorService");
 
 const ActorInfoDao = require("../pojo/ActorInfo");
 
 const router = express.Router();
+
+const upload = multer({ dest: "uploads/" });
+
+router.post("/upload", upload.single("csvFile"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded." });
+    }
+    const csvFilePath = req.file.path;
+    const actorsToAdd = [];
+    fs.createReadStream(csvFilePath)
+      .pipe(csv({ headers: ["first_name", "last_name"] }))
+      .on("data", (row) => {
+        const actorInfoDaoInstance = new ActorInfoDao(row);
+        actorsToAdd.push(actorInfoDaoInstance);
+      })
+      .on("end", async () => {
+        try {
+          for (const actor of actorsToAdd) {
+            await service.createActor(actor);
+          }
+          fs.unlinkSync(csvFilePath);
+
+          res.json({
+            message: `${actorsToAdd.length} actors added from CSV successfully.`,
+          });
+        } catch (error) {
+          console.error("Error while inserting actors:", error);
+          res.status(500).json({ error: "error" });
+        }
+      });
+  } catch (error) {
+    console.error("Error while processing CSV file:", error);
+    res.status(500).json({ error: "error" });
+  }
+});
 
 router.post("/create", async (req, res) => {
   try {
