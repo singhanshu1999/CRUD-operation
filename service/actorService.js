@@ -5,6 +5,11 @@ async function createActor(actorInfoDaoInstance) {
   return insertedActor;
 }
 
+async function uploadActor(actor) {
+  const uploadedActor = await db.actorUploadQuery(actor);
+  return uploadedActor;
+}
+
 async function getActor() {
   const gettedActor = await db.actorGetQuery();
   return gettedActor;
@@ -34,4 +39,5 @@ module.exports = {
   getActorById,
   updateActor,
   removeActor,
+  uploadActor,
 };

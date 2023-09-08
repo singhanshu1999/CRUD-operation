@@ -43,6 +43,24 @@ async function actorCreateQuery(actorInfoDaoInstance) {
   }
 }
 
+async function actorUploadQuery(actor) {
+  try {
+    const { error } = validation.createActorSchema.validate(actor);
+    if (error) {
+      console.error("Validation error:", error.details[0].message);
+      return;
+    }
+    const insertQuery = queries.insertActor;
+    const values = [actor.first_name, actor.last_name];
+    const client = await pool1.connect();
+    const result = await client.query(insertQuery, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error in actorUploadQuery:", error.message);
+    return null;
+  }
+}
+
 async function actorGetQuery() {
   try {
     const getQuery = queries.gettingActor;
@@ -132,4 +150,5 @@ module.exports = {
   actorGetByIdQuery,
   actorUpdateQuery,
   actorRemoveQuery,
+  actorUploadQuery,
 };

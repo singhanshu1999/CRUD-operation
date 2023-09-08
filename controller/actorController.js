@@ -22,7 +22,7 @@ router.post("/upload", upload.single("csvFile"), async (req, res) => {
     const csvFilePath = req.file.path;
     const actorsToAdd = [];
     fs.createReadStream(csvFilePath)
-      .pipe(csv({ headers: ["first_name", "last_name"] }))
+      .pipe(csv())
       .on("data", (row) => {
         const actorInfoDaoInstance = new ActorInfoDao(row);
         actorsToAdd.push(actorInfoDaoInstance);
@@ -30,7 +30,7 @@ router.post("/upload", upload.single("csvFile"), async (req, res) => {
       .on("end", async () => {
         try {
           for (const actor of actorsToAdd) {
-            await service.createActor(actor);
+            await service.uploadActor(actor);
           }
           fs.unlinkSync(csvFilePath);
 
