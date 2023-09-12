@@ -15,6 +15,7 @@ const queries = {
     "INSERT INTO address(address, address2, district, city_id, postal_code, phone) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
   gettingAddress: "SELECT * FROM address",
   findIdQuery: " SELECT address_id FROM address WHERE address_id=$1 ",
+  findIdQueryAddress: " SELECT * FROM city WHERE city_id=$1 ",
   getAddressById: "SELECT * FROM address WHERE address_id=$1",
   updateAddressById:
     "UPDATE address SET address =$1, address2 =$2, district =$3 WHERE address_id =$4 RETURNING *",
@@ -30,6 +31,15 @@ async function addressCreateQuery(addressInfoDaoInstance) {
       console.error("Validation error:", error.details[0].message);
       return;
     }
+    const checkQuery = queries.findIdQueryAddress;
+    const client = await pool1.connect();
+    const checkResult = await client.query(checkQuery, [
+      addressInfoDaoInstance.city_id,
+    ]);
+    if (checkResult.rows.length === 0) {
+      console.error("Address with ID does not exist.");
+      return;
+    }
     const insertQuery = queries.insertAddress;
     const values = [
       addressInfoDaoInstance.address,
@@ -39,7 +49,6 @@ async function addressCreateQuery(addressInfoDaoInstance) {
       addressInfoDaoInstance.postal_code,
       addressInfoDaoInstance.phone,
     ];
-    const client = await pool1.connect();
     const result = await client.query(insertQuery, values);
     return result.rows[0];
   } catch (error) {

@@ -19,32 +19,14 @@ router.post("/upload", upload.single("csvFile"), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded." });
     }
-    const csvFilePath = req.file.path;
-    const actorsToAdd = [];
-    fs.createReadStream(csvFilePath)
-      .pipe(csv())
-      .on("data", (row) => {
-        const actorInfoDaoInstance = new ActorInfoDao(row);
-        actorsToAdd.push(actorInfoDaoInstance);
-      })
-      .on("end", async () => {
-        try {
-          for (const actor of actorsToAdd) {
-            await service.uploadActor(actor);
-          }
-          fs.unlinkSync(csvFilePath);
-
-          res.json({
-            message: `${actorsToAdd.length} actors added from CSV successfully.`,
-          });
-        } catch (error) {
-          console.error("Error while inserting actors:", error);
-          res.status(500).json({ error: "error" });
-        }
-      });
+    const actorsToAdd = await service.uploadActor(req.file.path);
+    fs.unlinkSync(req.file.path);
+    res.json({
+      message: `${actorsToAdd.length} actors added from CSV successfully.`,
+    });
   } catch (error) {
     console.error("Error while processing CSV file:", error);
-    res.status(500).json({ error: "error" });
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 
@@ -55,7 +37,7 @@ router.post("/create", async (req, res) => {
     res.json(newActor);
   } catch (error) {
     console.error("Error while creating record:", error);
-    res.status(500).json({ error: "error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -65,7 +47,7 @@ router.get("/", async (req, res) => {
     res.json(fetchActor);
   } catch (error) {
     console.error("error while retrieving the data", error);
-    res.status(500).json({ error: "error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -76,7 +58,7 @@ router.get("/:actor_id", async (req, res) => {
     res.json(fetchActorById);
   } catch (error) {
     console.error("error while retrieving the data", error);
-    res.status(500).json({ error: "error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -88,7 +70,7 @@ router.put("/update/:actor_id", async (req, res) => {
     res.json(modifyActor);
   } catch (error) {
     console.error("Error while updating record:", error);
-    res.status(500).json({ error: "error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -99,7 +81,7 @@ router.delete("/remove/:actor_id", async (req, res) => {
     res.json(deleteActor);
   } catch (error) {
     console.error("erroe while deleting the record", error);
-    req.status(500).json({ error: "error" });
+    req.status(500).json({ error: "Internal server error" });
   }
 });
 

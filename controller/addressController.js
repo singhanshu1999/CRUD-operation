@@ -12,7 +12,7 @@ router.post("/create", async (req, res) => {
     const newAddress = await service.createAddress(addressInfoDaoInstance);
     res.json(newAddress);
   } catch (error) {
-    console.error("error while fetching the address", error);
+    console.error("Error while creating an address", error);
     res.status(500).json({ error: "error" });
   }
 });
@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
     const fetchAddress = await service.getAddress();
     res.json(fetchAddress);
   } catch (error) {
-    console.error("error while fetching the address", error);
+    console.error("Error while fetching the address", error);
     res.status(500).json({ error: "error" });
   }
 });
@@ -33,7 +33,7 @@ router.get("/:address_id", async (req, res) => {
     const fetchAddressById = await service.getAddressById(req.params);
     res.json(fetchAddressById);
   } catch (error) {
-    console.error("error while fetching the address", error);
+    console.error("Error while fetching the address", error);
     res.status(500).json({ error: "error" });
   }
 });
@@ -45,7 +45,7 @@ router.put("/update/:address_id", async (req, res) => {
     const modifyAddress = await service.updateAddress(req.params, req.body);
     res.json(modifyAddress);
   } catch (error) {
-    console.error("error while fetching the address", error);
+    console.error("Error while updating the address", error);
     res.status(500).json({ error: "error" });
   }
 });
@@ -56,7 +56,7 @@ router.delete("/remove/:address_id", async (req, res) => {
     const deleteAddress = await service.removeAddress(req.params);
     res.json(deleteAddress);
   } catch (error) {
-    console.error("error while fetching the address", error);
+    console.error("Error while deleting the address", error);
     res.status(500).json({ error: "error" });
   }
 });
