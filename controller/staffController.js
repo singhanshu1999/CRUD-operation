@@ -38,6 +38,17 @@ router.get("/:staff_id", async (req, res) => {
   }
 });
 
+router.get("/staffbycity/:city_name", async (req, res) => {
+  try {
+    const { city_name } = req.params;
+    const fetchStaffByCityName = await service.getStaffByCityName(req.params);
+    return res.json(fetchStaffByCityName);
+  } catch (error) {
+    console.error("error while fetching the staff", error);
+    res.status(500).json({ error: "error" });
+  }
+});
+
 router.put("/update/:staff_id", async (req, res) => {
   try {
     const { staff_id } = req.params;

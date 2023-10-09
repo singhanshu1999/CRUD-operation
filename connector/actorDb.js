@@ -1,6 +1,7 @@
 const { Pool } = require("pg");
 
 const validation = require("../validation/actorValidation");
+const { response } = require("express");
 
 const pool1 = new Pool({
   user: "postgres",
@@ -27,7 +28,7 @@ async function actorCreateQuery(actorInfoDaoInstance) {
       validation.createActorSchema.validate(actorInfoDaoInstance);
     if (error) {
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const insertQuery = queries.insertActor;
     const values = [
@@ -48,7 +49,7 @@ async function actorUploadQuery(actor) {
     const { error } = validation.createActorSchema.validate(actor);
     if (error) {
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: " " });
     }
     const insertQuery = queries.insertActor;
     const values = [actor.first_name, actor.last_name];
@@ -81,7 +82,8 @@ async function actorGetByIdQuery(actorInfoInstance) {
       actorInfoInstance.actor_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("actor id is not valid!!");
+      console.error("actor id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const getByIdQuery = queries.getActorById;
     const values = [actorInfoInstance.actor_id];
@@ -99,7 +101,7 @@ async function actorUpdateQuery(actorInfoInstance, actorInfoDaoInstance) {
       validation.updateActorSchema.validate(actorInfoDaoInstance);
     if (error) {
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const checkQuery = queries.findIdQuery;
     const client = await pool1.connect();
@@ -107,7 +109,8 @@ async function actorUpdateQuery(actorInfoInstance, actorInfoDaoInstance) {
       actorInfoInstance.actor_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("actor id is not valid!!");
+      console.error("actor id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const updateQuery = queries.updateActorById;
     const values = [
@@ -130,7 +133,8 @@ async function actorRemoveQuery(actorInfoInstance) {
       actorInfoInstance.actor_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("actor id is not valid!!");
+      console.error("actor id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const removeQuery = queries.removeActorById;
     const values = [actorInfoInstance.actor_id];

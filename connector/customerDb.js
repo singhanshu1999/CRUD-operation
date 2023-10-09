@@ -29,7 +29,7 @@ async function customerCreateQuery(customerInfoDaoInstance) {
     );
     if (error) {
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const createQuery = queries.insertCustomer;
     const values = [
@@ -71,7 +71,8 @@ async function customerGetByIdQuery(customerInfoInstance) {
       customerInfoInstance.customer_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("customer id is not valid!!");
+      console.error("customer id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const getByIdQuery = queries.getCustomerById;
     const values = [customerInfoInstance.customer_id];
@@ -93,7 +94,7 @@ async function customerUpdateQuery(
     );
     if (error) {
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const checkQuery = queries.findIdQuery;
     const client = await pool1.connect();
@@ -101,7 +102,8 @@ async function customerUpdateQuery(
       customerInfoInstance.customer_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("customer id is not valid!!");
+      console.error("customer id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const updateQuery = queries.updateCustomerById;
     const values = [
@@ -126,7 +128,8 @@ async function customerRemoveQuery(customerInfoInstance) {
       customerInfoInstance.customer_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("customer id is not valid!!");
+      console.error("customer id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const removeQuery = queries.removeCustomerById;
     const values = [customerInfoInstance.customer_id];

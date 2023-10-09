@@ -14,6 +14,8 @@ const queries = {
   insertStaff:
     "INSERT INTO staff (first_name, last_name, address_id, email, store_id, active, username, password) values($1,$2,$3,$4,$5,$6,$7,$8) RETURNING * ",
   gettingStaff: "SELECT * FROM staff",
+  findByCityName:
+    " SELECT * FROM city JOIN address ON city.city_id = address.city_id JOIN staff ON address.address_id = staff.address_id WHERE city.city_name = $1",
   findIdQuery: " SELECT staff_id FROM staff WHERE staff_id=$1 ",
   getStaffById: "SELECT * FROM staff WHERE staff_id=$1",
   updateStaffById:
@@ -27,7 +29,7 @@ async function staffCreateQuery(staffInfoDaoInstance) {
       validation.createStaffSchema.validate(staffInfoDaoInstance);
     if (error) {
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const createQuery = queries.insertStaff;
     const values = [
@@ -61,6 +63,18 @@ async function staffGetQuery() {
   }
 }
 
+async function staffGetByCityQuery(staffInfoInstance) {
+  try {
+    const getQuery = queries.findByCityName;
+    const client = await pool1.connect();
+    const result = await client.query(getQuery, [staffInfoInstance.city_name]);
+    return result.rows;
+  } catch (error) {
+    console.error("Error in staffGetQuery:", error.message);
+    return null;
+  }
+}
+
 async function staffGetByIdQuery(staffInfoInstance) {
   try {
     const checkQuery = queries.findIdQuery;
@@ -69,7 +83,8 @@ async function staffGetByIdQuery(staffInfoInstance) {
       staffInfoInstance.staff_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("staff id is not valid!!");
+      console.error("staff id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const getByIdQuery = queries.getStaffById;
     const values = [staffInfoInstance.staff_id];
@@ -87,7 +102,7 @@ async function staffUpdateQuery(staffInfoInstance, staffInfoDaoInstance) {
       validation.updateStaffSchema.validate(staffInfoDaoInstance);
     if (error) {
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const checkQuery = queries.findIdQuery;
     const client = await pool1.connect();
@@ -95,7 +110,8 @@ async function staffUpdateQuery(staffInfoInstance, staffInfoDaoInstance) {
       staffInfoInstance.staff_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("staff id is not valid!!");
+      console.error("staff id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const updateQuery = queries.updateStaffById;
     const values = [
@@ -120,7 +136,8 @@ async function staffRemoveQuery(staffInfoInstance) {
       staffInfoInstance.staff_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("staff id is not valid!!");
+      console.error("staff id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const removeQuery = queries.removeStaffById;
     const values = [staffInfoInstance.staff_id];
@@ -137,6 +154,7 @@ module.exports = {
   queries,
   staffCreateQuery,
   staffGetQuery,
+  staffGetByCityQuery,
   staffGetByIdQuery,
   staffUpdateQuery,
   staffRemoveQuery,

@@ -29,7 +29,7 @@ async function filmCreateQuery(filmInfoDaoInstance) {
     if (error) {
       console.log(error);
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const insertQuery = queries.insertFilm;
     const values = [
@@ -73,7 +73,8 @@ async function filmGetByIdQuery(filmInfoDaoInstance) {
       filmInfoDaoInstance.film_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("film id is not available");
+      console.error("film id is not available");
+      return response.status(400).json({ error: "" });
     }
     const getByIdQuery = queries.getFilmById;
     const values = [filmInfoDaoInstance.film_id];
@@ -91,7 +92,7 @@ async function filmUpdateQuery(filmInfoParamsInstance, filmInfoDaoInstance) {
     const { error } = validation.updateFilmSchema.validate(filmInfoDaoInstance);
     if (error) {
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const checkQuery = queries.findIdQuery;
     const client = await pool1.connect();
@@ -99,7 +100,8 @@ async function filmUpdateQuery(filmInfoParamsInstance, filmInfoDaoInstance) {
       filmInfoParamsInstance.film_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("film id is not available");
+      console.error("film id is not available");
+      return response.status(400).json({ error: "" });
     }
     const updateQuery = queries.updateFilmById;
     const values = [
@@ -124,7 +126,8 @@ async function filmRemoveQuery(filmInfoParamsInstance) {
       filmInfoParamsInstance.film_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("film id is not available");
+      console.error("film id is not available");
+      return response.status(400).json({ error: "" });
     }
     const removeQuery = queries.removeFilmById;
     const values = [filmInfoParamsInstance.film_id];

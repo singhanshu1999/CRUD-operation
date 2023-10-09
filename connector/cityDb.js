@@ -1,6 +1,7 @@
 const { Pool } = require("pg");
 
 const validation = require("../validation/cityValidation");
+const { response } = require("express");
 
 const pool1 = new Pool({
   user: "postgres",
@@ -26,7 +27,7 @@ async function cityCreateQuery(cityInfoDaoInstance) {
     const { error } = validation.createCitySchema.validate(cityInfoDaoInstance);
     if (error) {
       console.error("Validation error: ", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const checkQuery = queries.findIdQueryCountry;
     const client = await pool1.connect();
@@ -35,7 +36,7 @@ async function cityCreateQuery(cityInfoDaoInstance) {
     ]);
     if (checkResult.rows.length === 0) {
       console.error("Country with ID does not exist.");
-      return;
+      return response.status(400).json({ error: "" });
     }
     const insertQuery = queries.insertCity;
     const values = [
@@ -70,7 +71,8 @@ async function cityGetByIdQuery(cityInfoInstance) {
       cityInfoInstance.city_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("city id is not valid!!!");
+      console.error("city id is not valid!!!");
+      return response.status(400).json({ error: "" });
     }
     const getByIdQuery = queries.getCityById;
     const values = [cityInfoInstance.city_id];
@@ -87,7 +89,7 @@ async function cityUpdateQuery(cityInfoInstance, cityInfoDaoInstance) {
     const { error } = validation.updateCitySchema.validate(cityInfoDaoInstance);
     if (error) {
       console.error("Validation error: ", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const checkQuery = queries.findIdQuery;
     const client = await pool1.connect();
@@ -95,7 +97,8 @@ async function cityUpdateQuery(cityInfoInstance, cityInfoDaoInstance) {
       cityInfoInstance.city_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("city id is not valid!!!");
+      console.error("city id is not valid!!!");
+      return response.status(400).json({ error: "" });
     }
     const updateQuery = queries.updateCityById;
     const values = [cityInfoDaoInstance.city_name, cityInfoInstance.city_id];
@@ -115,7 +118,8 @@ async function cityRemoveQuery(cityInfoInstance) {
       cityInfoInstance.city_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("city id is not available");
+      console.error("city id is not available");
+      return response.status(400).json({ error: "" });
     }
     const removeQuery = queries.removeCityById;
     const values = [cityInfoInstance.city_id];

@@ -54,7 +54,8 @@ async function storeGetByIdQuery(storeInfoInstance) {
       storeInfoInstance.store_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("store id is not valid!!");
+      console.error("store id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const getByIdQuery = queries.getStoreById;
     const values = [storeInfoInstance.store_id];
@@ -74,7 +75,8 @@ async function storeUpdateQuery(storeInfoInstance, storeInfoDaoInstance) {
       storeInfoInstance.store_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("store id is not valid!!");
+      console.error("store id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const updateQuery = queries.updateStoreById;
     const values = [
@@ -97,7 +99,8 @@ async function storeRemoveQuery(storeInfoInstance) {
       storeInfoInstance.store_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("store id is not valid!!");
+      console.error("store id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const removeQuery = queries.removeStoreById;
     const values = [storeInfoInstance.store_id];

@@ -1,31 +1,31 @@
 const db = require("../connector/addressDb");
 
 async function createAddress(addressInfoDaoInstance) {
-  const insertedAddress = await db.addressCreateQuery(addressInfoDaoInstance);
-  return insertedAddress;
+  const insertAddressList = await db.addressCreateQuery(addressInfoDaoInstance);
+  return insertAddressList;
 }
 
 async function getAddress() {
-  const gettedAddress = await db.addressGetQuery();
-  return gettedAddress;
+  const getAddressList = await db.addressGetQuery();
+  return getAddressList;
 }
 
 async function getAddressById(addressInfoInstance) {
-  const gettedAddressById = await db.addressGetByIdQuery(addressInfoInstance);
-  return gettedAddressById;
+  const getAddressListById = await db.addressGetByIdQuery(addressInfoInstance);
+  return getAddressListById;
 }
 
 async function updateAddress(addressInfoInstance, addressInfoDaoInstance) {
-  const updatedAddress = await db.addressUpdateQuery(
+  const updateAddressList = await db.addressUpdateQuery(
     addressInfoInstance,
     addressInfoDaoInstance
   );
-  return updatedAddress;
+  return updateAddressList;
 }
 
 async function removeAddress(addressInfoInstance) {
-  const removedAddress = await db.addressRemoveQuery(addressInfoInstance);
-  return removedAddress;
+  const removeAddressList = await db.addressRemoveQuery(addressInfoInstance);
+  return removeAddressList;
 }
 
 module.exports = {

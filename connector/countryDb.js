@@ -1,6 +1,7 @@
 const { Pool } = require("pg");
 
 const validation = require("../validation/countryValidation");
+const { response } = require("express");
 
 const pool1 = new Pool({
   user: "postgres",
@@ -27,7 +28,7 @@ async function countryCreateQuery(countryInfoDaoInstance) {
     );
     if (error) {
       console.error("Validation error: ", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const insertQuery = queries.insertCountry;
     const values = [countryInfoDaoInstance.country_name];
@@ -60,7 +61,8 @@ async function countryGetByIdQuery(countryInfoInstance) {
       countryInfoInstance.country_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("country id is not available");
+      console.error("country id is not available");
+      return response.status(400).json({ error: "" });
     }
     const getByIdQuery = queries.getCountryById;
     const values = [countryInfoInstance.country_id];
@@ -79,7 +81,7 @@ async function countryUpdateQuery(countryInfoInstance, countryInfoDaoInstance) {
     );
     if (error) {
       console.error("Validation error: ", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const checkQuery = queries.findIdQuery;
     const client = await pool1.connect();
@@ -87,7 +89,8 @@ async function countryUpdateQuery(countryInfoInstance, countryInfoDaoInstance) {
       countryInfoInstance.country_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("country id is not valid!!!");
+      console.error("country id is not valid!!!");
+      return response.status(400).json({ error: "" });
     }
     const updateQuery = queries.updateCountryById;
     const values = [
@@ -110,7 +113,8 @@ async function countryRemoveQuery(countryInfoInstance) {
       countryInfoInstance.country_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("country id is not available");
+      console.error("country id is not available");
+      return response.status(400).json({ error: "" });
     }
     const removeQuery = queries.removeCountryById;
     const values = [countryInfoInstance.country_id];

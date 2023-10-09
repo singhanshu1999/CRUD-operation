@@ -1,37 +1,43 @@
 const db = require("../connector/staffDb");
 
 async function createStaff(staffInfoDaoInstance) {
-  const insertedStaff = await db.staffCreateQuery(staffInfoDaoInstance);
-  return insertedStaff;
+  const insertStaffList = await db.staffCreateQuery(staffInfoDaoInstance);
+  return insertStaffList;
 }
 
 async function getStaff() {
-  const gettedStaff = await db.staffGetQuery();
-  return gettedStaff;
+  const getStaffList = await db.staffGetQuery();
+  return getStaffList;
 }
 
 async function getStaffById(staffInfoInstance) {
-  const gettedByIdStaff = await db.staffGetByIdQuery(staffInfoInstance);
-  return gettedByIdStaff;
+  const getStaffListByIdStaff = await db.staffGetByIdQuery(staffInfoInstance);
+  return getStaffListByIdStaff;
+}
+
+async function getStaffByCityName(staffInfoInstance) {
+  const getListByCityStaff = await db.staffGetByCityQuery(staffInfoInstance);
+  return getListByCityStaff;
 }
 
 async function updatestaff(staffInfoInstance, staffInfoDaoInstance) {
-  const updatedStaff = await db.staffUpdateQuery(
+  const updateStaffList = await db.staffUpdateQuery(
     staffInfoInstance,
     staffInfoDaoInstance
   );
-  return updatedStaff;
+  return updateStaffList;
 }
 
 async function removeStaff(staffInfoInstance) {
-  const removedStaff = await db.staffRemoveQuery(staffInfoInstance);
-  return removedStaff;
+  const removeStaffList = await db.staffRemoveQuery(staffInfoInstance);
+  return removeStaffList;
 }
 
 module.exports = {
   createStaff,
   getStaff,
   getStaffById,
+  getStaffByCityName,
   updatestaff,
   removeStaff,
 };

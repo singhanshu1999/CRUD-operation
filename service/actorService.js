@@ -7,8 +7,8 @@ const csv = require("csv-parser");
 const actorInfoDao = require("../pojo/ActorInfo");
 
 async function createActor(actorInfoDaoInstance) {
-  const insertedActor = await db.actorCreateQuery(actorInfoDaoInstance);
-  return insertedActor;
+  const insertActorList = await db.actorCreateQuery(actorInfoDaoInstance);
+  return insertActorList;
 }
 
 async function uploadActor(actorCsvFile) {
@@ -30,26 +30,26 @@ async function uploadActor(actorCsvFile) {
 }
 
 async function getActor() {
-  const gettedActor = await db.actorGetQuery();
-  return gettedActor;
+  const getActorList = await db.actorGetQuery();
+  return getActorList;
 }
 
 async function getActorById(actorInfoInstance) {
-  const gettedActorById = await db.actorGetByIdQuery(actorInfoInstance);
-  return gettedActorById;
+  const getActorListById = await db.actorGetByIdQuery(actorInfoInstance);
+  return getActorListById;
 }
 
 async function updateActor(actorInfoInstance, actorInfoDaoInstance) {
-  const updatedActor = await db.actorUpdateQuery(
+  const updateActorList = await db.actorUpdateQuery(
     actorInfoInstance,
     actorInfoDaoInstance
   );
-  return updatedActor;
+  return updateActorList;
 }
 
 async function removeActor(actorInfoInstance) {
-  const removedActor = await db.actorRemoveQuery(actorInfoInstance);
-  return removedActor;
+  const removeActorList = await db.actorRemoveQuery(actorInfoInstance);
+  return removeActorList;
 }
 
 module.exports = {

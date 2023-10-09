@@ -1,31 +1,31 @@
 const db = require("../connector/cityDb");
 
 async function createCity(cityInfoDaoInstance) {
-  const insertedCity = await db.cityCreateQuery(cityInfoDaoInstance);
-  return insertedCity;
+  const insertCityList = await db.cityCreateQuery(cityInfoDaoInstance);
+  return insertCityList;
 }
 
 async function getCity() {
-  const gettedCity = await db.cityGetQuery();
-  return gettedCity;
+  const getCityList = await db.cityGetQuery();
+  return getCityList;
 }
 
 async function getCityById(cityInfoInstance) {
-  const gettedCityById = await db.cityGetByIdQuery(cityInfoInstance);
-  return gettedCityById;
+  const getCityListById = await db.cityGetByIdQuery(cityInfoInstance);
+  return getCityListById;
 }
 
 async function updateCity(cityInfoInstance, cityInfoDaoInstance) {
-  const updatedCity = await db.cityUpdateQuery(
+  const updateCityList = await db.cityUpdateQuery(
     cityInfoInstance,
     cityInfoDaoInstance
   );
-  return updatedCity;
+  return updateCityList;
 }
 
 async function removeCity(cityInfoInstance) {
-  const deletedCity = await db.cityRemoveQuery(cityInfoInstance);
-  return deletedCity;
+  const removeCityList = await db.cityRemoveQuery(cityInfoInstance);
+  return removeCityList;
 }
 
 module.exports = {

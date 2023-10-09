@@ -1,35 +1,35 @@
 const db = require("../connector/customerDb");
 
 async function createCustomer(customerInfoDaoInstance) {
-  const insertedCustomer = await db.customerCreateQuery(
+  const insertCustomerList = await db.customerCreateQuery(
     customerInfoDaoInstance
   );
-  return insertedCustomer;
+  return insertCustomerList;
 }
 
 async function getCustomer() {
-  const gettedCustomer = await db.customerGetQuery();
-  return gettedCustomer;
+  const getCustomerList = await db.customerGetQuery();
+  return getCustomerList;
 }
 
 async function getCustomerById(customerInfoInstance) {
-  const gettedCustomerById = await db.customerGetByIdQuery(
+  const getCustomerListById = await db.customerGetByIdQuery(
     customerInfoInstance
   );
-  return gettedCustomerById;
+  return getCustomerListById;
 }
 
 async function updateCustomer(customerInfoInstance, customerInfoDaoInstance) {
-  const updatedCustomer = await db.customerUpdateQuery(
+  const updateCustomerList = await db.customerUpdateQuery(
     customerInfoInstance,
     customerInfoDaoInstance
   );
-  return updatedCustomer;
+  return updateCustomerList;
 }
 
 async function removeCustomer(customerInfoInstance) {
-  const removedCustomer = await db.customerRemoveQuery(customerInfoInstance);
-  return removedCustomer;
+  const removeCustomerList = await db.customerRemoveQuery(customerInfoInstance);
+  return removeCustomerList;
 }
 
 module.exports = {

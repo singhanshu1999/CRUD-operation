@@ -28,7 +28,7 @@ async function rentalCreateQuery(rentalInfoDaoInstance) {
     );
     if (error) {
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const createQuery = queries.insertRental;
     const values = [
@@ -67,7 +67,8 @@ async function rentalGetByIdQuery(rentalInfoInstance) {
       rentalInfoInstance.rental_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("rental id is not valid!!");
+      console.error("rental id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const getByIdQuery = queries.getRentalById;
     const values = [rentalInfoInstance.rental_id];
@@ -86,7 +87,7 @@ async function rentalUpdateQuery(rentalInfoInstance, rentalInfoDaoInstance) {
     );
     if (error) {
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const checkQuery = queries.findIdQuery;
     const client = await pool1.connect();
@@ -94,7 +95,8 @@ async function rentalUpdateQuery(rentalInfoInstance, rentalInfoDaoInstance) {
       rentalInfoInstance.rental_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("rental id is not valid!!");
+      console.error("rental id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const updateQuery = queries.updateRentalById;
     const values = [
@@ -119,7 +121,8 @@ async function rentalRemoveQuery(rentalInfoInstance) {
       rentalInfoInstance.rental_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("rental id is not valid!!");
+      console.error("rental id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const removeQuery = queries.removeRentalById;
     const values = [rentalInfoInstance.rental_id];

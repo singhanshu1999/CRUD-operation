@@ -1,31 +1,31 @@
 const db = require("../connector/storeDb");
 
 async function createStore(storeInfoDaoInstance) {
-  const insertedStore = await db.storeCreateQuery(storeInfoDaoInstance);
-  return insertedStore;
+  const insertStoreList = await db.storeCreateQuery(storeInfoDaoInstance);
+  return insertStoreList;
 }
 
 async function getStore() {
-  const gettedStore = await db.storeGetQuery();
-  return gettedStore;
+  const getStoreList = await db.storeGetQuery();
+  return getStoreList;
 }
 
 async function getStoreById(storeInfoInstance) {
-  const gettedStoreById = await db.storeGetByIdQuery(storeInfoInstance);
-  return gettedStoreById;
+  const getStoreListById = await db.storeGetByIdQuery(storeInfoInstance);
+  return getStoreListById;
 }
 
 async function updateStore(storeInfoInstance, storeInfoDaoInstance) {
-  const updatedStore = await db.storeUpdateQuery(
+  const updateStoreList = await db.storeUpdateQuery(
     storeInfoInstance,
     storeInfoDaoInstance
   );
-  return updatedStore;
+  return updateStoreList;
 }
 
 async function removeStore(storeInfoInstance) {
-  const removedStore = await db.storeRemoveQuery(storeInfoInstance);
-  return removedStore;
+  const removeStoreList = await db.storeRemoveQuery(storeInfoInstance);
+  return removeStoreList;
 }
 
 module.exports = {

@@ -1,31 +1,31 @@
 const db = require("../connector/rentalDb");
 
 async function createRental(rentalInfoDaoInstance) {
-  const insertedRental = await db.rentalCreateQuery(rentalInfoDaoInstance);
-  return insertedRental;
+  const insertRentalList = await db.rentalCreateQuery(rentalInfoDaoInstance);
+  return insertRentalList;
 }
 
 async function getRental() {
-  const gettedRental = await db.rentalGetQuery();
-  return gettedRental;
+  const getRentalList = await db.rentalGetQuery();
+  return getRentalList;
 }
 
 async function getRentalById(rentalInfoInstance) {
-  const gettedRentalById = await db.rentalGetByIdQuery(rentalInfoInstance);
-  return gettedRentalById;
+  const getRentalListById = await db.rentalGetByIdQuery(rentalInfoInstance);
+  return getRentalListById;
 }
 
 async function updateRental(rentalInfoInstance, rentalInfoDaoInstance) {
-  const updatedRental = await db.rentalUpdateQuery(
+  const updateRentalList = await db.rentalUpdateQuery(
     rentalInfoInstance,
     rentalInfoDaoInstance
   );
-  return updatedRental;
+  return updateRentalList;
 }
 
 async function removeRental(rentalInfoInstance) {
-  const removedRental = await db.rentalRemoveQuery(rentalInfoInstance);
-  return removedRental;
+  const removeRentalList = await db.rentalRemoveQuery(rentalInfoInstance);
+  return removeRentalList;
 }
 
 module.exports = {

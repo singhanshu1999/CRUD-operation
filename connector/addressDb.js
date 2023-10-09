@@ -1,6 +1,7 @@
 const { Pool } = require("pg");
 
 const validation = require("../validation/addressValidation");
+const { response } = require("express");
 
 const pool1 = new Pool({
   user: "postgres",
@@ -29,7 +30,7 @@ async function addressCreateQuery(addressInfoDaoInstance) {
     );
     if (error) {
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const checkQuery = queries.findIdQueryAddress;
     const client = await pool1.connect();
@@ -38,7 +39,7 @@ async function addressCreateQuery(addressInfoDaoInstance) {
     ]);
     if (checkResult.rows.length === 0) {
       console.error("Address with ID does not exist.");
-      return;
+      return response.status(400).json({ error: "" });
     }
     const insertQuery = queries.insertAddress;
     const values = [
@@ -77,7 +78,8 @@ async function addressGetByIdQuery(addressInfoInstance) {
       addressInfoInstance.address_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("address id is not valid!!");
+      console.error("address id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const getByIdQuery = queries.getAddressById;
     const values = [addressInfoInstance.address_id];
@@ -96,7 +98,7 @@ async function addressUpdateQuery(addressInfoInstance, addressInfoDaoInstance) {
     );
     if (error) {
       console.error("Validation error:", error.details[0].message);
-      return;
+      return response.status(400).json({ error: "" });
     }
     const checkQuery = queries.findIdQuery;
     const client = await pool1.connect();
@@ -104,7 +106,8 @@ async function addressUpdateQuery(addressInfoInstance, addressInfoDaoInstance) {
       addressInfoInstance.address_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("address id is not valid!!");
+      console.error("address id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const updateQuery = queries.updateAddressById;
     const values = [
@@ -129,7 +132,8 @@ async function addressRemoveQuery(addressInfoInstance) {
       addressInfoInstance.address_id,
     ]);
     if (checkResult.rows.length === 0) {
-      throw new Error("address id is not valid!!");
+      console.error("address id is not valid!!");
+      return response.status(400).json({ error: "" });
     }
     const removeQuery = queries.removeAddressById;
     const values = [addressInfoInstance.address_id];

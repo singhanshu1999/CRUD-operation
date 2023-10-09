@@ -1,31 +1,31 @@
 const db = require("../connector/countryDb");
 
 async function createCountry(countryInfoDaoInstance) {
-  const insertedCountry = await db.countryCreateQuery(countryInfoDaoInstance);
-  return insertedCountry;
+  const insertCountryList = await db.countryCreateQuery(countryInfoDaoInstance);
+  return insertCountryList;
 }
 
 async function getCountry() {
-  const gettedCountry = await db.countryGetQuery();
-  return gettedCountry;
+  const getCountryList = await db.countryGetQuery();
+  return getCountryList;
 }
 
 async function getCountryById(countryInfoInstance) {
-  const gettedCountryById = await db.countryGetByIdQuery(countryInfoInstance);
-  return gettedCountryById;
+  const getCountryListById = await db.countryGetByIdQuery(countryInfoInstance);
+  return getCountryListById;
 }
 
 async function updateCountry(countryInfoInstance, countryInfoDaoInstance) {
-  const updatedCountry = await db.countryUpdateQuery(
+  const updateCountryList = await db.countryUpdateQuery(
     countryInfoInstance,
     countryInfoDaoInstance
   );
-  return updatedCountry;
+  return updateCountryList;
 }
 
 async function removeCountry(countryInfoInstance) {
-  const removedCountry = await db.countryRemoveQuery(countryInfoInstance);
-  return removedCountry;
+  const removeCountryList = await db.countryRemoveQuery(countryInfoInstance);
+  return removeCountryList;
 }
 
 module.exports = {
